@@ -1,0 +1,40 @@
+//ending event. sets appropriate flags and plays the event. obviously
+OnMazeEnd
+{
+
+}
+
+//handles ending menu.
+OnMenuEnd : all
+{
+	"\b2\_q"
+
+	if ARRAYSIZE(installedghostlist) <= 1 {
+		"\![Open Ghost Explorer,OnMenuEnd.Change,explorer]\n"
+		if lastghost != ""; "\![Open Last Ghost,OnMenuEnd.Change,lastghost]\n"
+		if ARRAYSIZE(installedghostlist) >= 3; "\![Open Random Ghost,OnMenuEnd.Change,random]\n"
+		"\![Open Next Ghost,OnMenuEnd.Change,next]\n\n"
+	}
+	else
+	{
+		"Looks like you have no other ghosts to boot. Try installing more ghosts!\n\n"
+	}
+
+	"\![Close Ghost,OnClose]  \![Reset,OnReset]"
+}
+
+OnMenuEnd.Change
+{
+	case reference0 {
+		when "explorer"; "\![open,ghostexplorer]"
+		when "lastghost"; "\![change,ghost,%(lastghost)]"
+		when "random"; "\![change,ghost,random]"
+		when "next"; "\![change,ghost,sequential]"
+	}
+}
+
+//conditional close dialogue depending on where you are in the story.
+OnClose
+{
+
+}

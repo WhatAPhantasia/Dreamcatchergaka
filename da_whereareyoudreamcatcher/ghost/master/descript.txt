@@ -1,0 +1,17 @@
+charset,UTF-8
+
+name,dA: where are you, dreamcatcher?
+type,ghost
+
+shiori,yaya.dll
+
+craftman,whataphantasia
+craftmanw,whataphantasia
+craftmanurl,https://whataphantasia.github.io/projects/ukagaka
+
+sakura.name,NightmArekeeper
+kero.name,NightmArekeeper's Castle
+
+icon,dreamcatcherArchives.ico
+
+sstp.allowunspecifiedsend,0

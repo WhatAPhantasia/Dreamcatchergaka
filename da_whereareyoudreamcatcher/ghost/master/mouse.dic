@@ -1,0 +1,61 @@
+//handles navigating the maze.
+OnMouseDoubleClick
+{
+	if reference5 == 0 //reference5 is the mouse button being clicked, in this case a left click
+	{
+		if reference4 == "up" || reference4 == "down" || reference4 == "left" || reference4 == "right"
+		{
+			"\![OnMove,%(reference4)]"
+		}
+		else
+		{
+			case gamestate
+			{
+				when 0; OnMazeNavMenu
+				when 1; OnMenuEnd
+				when 2; OnStudyMenu
+				when 5; OnMazeFix
+				others; OnEventRepair
+			}
+			//firstboot and events not accounted for because it. should be fine whatever. you shouldnt be able to access this and i don't want to make failsafes.
+		}
+	}
+}
+
+OnMazeNavMenu : all
+{
+	"\q\f[align,center]"
+	"\f[bold,1]- NAVIGATION -\n\f[bold,0]\n"
+	
+	"\![Up,OnMove,up,menu]\n"
+	"\![Left,OnMove,left,menu]        \![Right,OnMove,right,menu]\n"
+	"\![Down,OnMove,down,menu]\n\n"
+
+	"\f[align,right]\![Close,]"
+}
+
+//...also has petting nightmare in the study.
+OnMouseMove
+{
+	if reference3 == 0
+	{OnSakuraMouse(40)}
+}
+
+OnMouseScroll
+{
+	if reference3 == 0
+	{OnSakuraMouse(20)}
+}
+
+OnSakuraMouse
+{
+	if reference4 == "head"
+	{
+		"\0\s[0]Petting??"
+	}
+}
+
+OnMouseLeaveAll
+{
+	stroke = 0
+}

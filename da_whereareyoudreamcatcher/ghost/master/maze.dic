@@ -1,0 +1,126 @@
+//handles maze weirdness outside of clickable navigation in mouse.dic
+
+//absolutely inaccurate function name. do i care. not really
+OnMazeInit : all
+{
+    "\t\*"
+
+    if IsAkari
+    {
+        "%(TOUPPER(user))? \w8\w8AH, \w6I DIDN'T RECOGNIZE YOU! \w8FORGIVE ME; \w6IT IS QUITE GOOD TO SEE YOU AGAIN, \w4MY DEAR DREAMER. \w8\w8HUMOR ME FOR A SPELL, \w4WILL YOU?]\w8\w8\n"
+        "[YOU ALREADY KNOW ABOUT THE SECRET OF THE PREVIOUS DREAMCATCHER- \w8%(TOUPPER(rightword)). \w8\w6THE EXIT IS ON YOUR RIGHT. \w8\w6UNLESS \w8YOU'D RATHER STAY WITH ME?]\w8\w8\n"
+        "[GO UP TWICE, \w4RIGHT THRICE, \w4AND UP ONCE MORE. \w8\w6YOU'LL FIND ME IN MY STUDY.]\w8\w8\x"
+    }
+    else 
+    {
+        "[AFTER ALL THESE YEARS, \w6A LITTLE FINCH LIKE YOU SHOWS UP.]\w8\w8\n"
+        "[YOU MAY CALL ME NIGHTMARE- \w8AND I AM NOT GOING TO ALLOW YOU TO LEAVE UNTIL YOU PROVE YOUR WORTH IN THE ROLE YOU HAVE BEEN GIVEN.]\w8\w8\n"
+        "[THIS IS MY MINDSCAPE: \w8THE PALACE OF NIGHT. \w8THE PREVIOUS DREAMCATCHER HAS LEFT SECRETS HERE THAT DREAM WOULD NEVER TELL YOU.]\w8\w8\n"
+        "[FIND THEM, \w6AND THEN FIND ME AT THE EXIT. \w8PROVE YOUR WORTH.]\w8\w8\x"
+    }
+
+    "The feeling of despair leaves you as the figure disappears. \w8You should look for those so called secrets- \w8Secrets that you figure you'll find in the room ahead.\w8\w8\x"
+    OnMazeCheck
+}
+
+//handles game states. my code is mega disorganized
+//removed the story complete flag because i prefer this being handled by user position
+gamestate
+{
+    case room[userposition[0]][userposition[1],"|"]
+    {
+        when "e"; 1
+        when "s"; 2
+        when "j"; 3
+        when "p"; 4
+        when "x"; 5
+        others; 0
+        //better to account for all tiles now than later
+    }
+}
+
+room {
+    "x|x|x|x|x|x|x|x|x,/
+    x|x|x|j|x|.|s|.|x,/
+    x|.|.|.|.|.|.|.|x,/
+    x|x|x|.|x|x|x|x|x,/
+    x|.|.|.|.|.|p|e|x,/
+    x|x|x|x|x|x|x|x|x"
+}
+//usable letters: x . p j e s
+//this is a 9x6 grid. starting position is room[4][3,"|"], which is row col.
+
+//iiiiiiiiii. didn't realize i had to transfer this all to yaya. i might be a little dumb
+OnMove
+{
+    _newrow = userposition[0]
+    _newcol = userposition[1]
+
+    case reference0
+    {
+        when "up"; _newrow--
+        when "down"; _newrow++
+        when "left"; _newcol--
+        when "right"; _newcol++
+        else
+        {} //this should be impossible and a minor issue if possible, so no error message is needed
+    }
+
+    //handles visually unlocking tiles on the map.
+    if UnlockFlag("%(_newrow).%(newcol)") == 0; UnlockFlags ,= "%(_newrow).%(newcol)"
+
+    //handles valid map movement.
+    if room[_newrow][_newcol,"|"] == "e"
+    {
+        //yeah i'm not doing this the same way as the original project.
+        //i'm making it more complicated but i don't care. i hate loop states
+        //states are managed by what tile the user is on in addition to flags.
+        userposition[0] = _newrow
+        userposition[1] = _newcol
+        OnMazeEnd
+    }
+    elseif room[_newrow][_newcol,"|"] == "x"
+    {
+        nonoverlap:{
+            "That's a wall."
+            "You stop-- \w8There's a wall."
+            "Oh-- \w8That's a wall."
+            "Ouch-- \w8A wall..."
+            "It looks like a wall."
+            "It's a wall."
+            "Oh, a wall."
+            "Looks like a wall."
+            "It looks like its a wall."
+            "There's a wall."
+        }
+    }
+    elseif room[_newrow][_newcol,"|"] == "p"
+    {
+        //position is changed in the function below when user solves the puzzle, as a failsafe.
+        OnPuzzle
+    }
+    elseif room[_newrow][_newcol,"|"] == "j"
+    {
+        OnJournal
+    }
+    elseif room[_newrow][_newcol,"|"] == "s"
+    {
+        userposition[0] = _newrow
+        userposition[1] = _newcol 
+        //^ like for "e", position is updated here because current state is managed by the tile the user's on.
+        OnStudyEnter
+    }
+    else
+    {
+        userposition[0] = _newrow
+        userposition[1] = _newcol
+        if reference1 == "menu"; OnMazeNavMenu
+    }
+}
+
+OnMazeFix : all
+{
+    userposition = (4,3)
+    "\t\*That's strange. \w8It doesn't seem like you're supposed to be here... \w8\w4As soon as you blink, \w6you're right back to where you started.\w8\w8\n\n"
+    "\![Continue Onwards,OnMazeNavMenu]"
+}

@@ -1,0 +1,202 @@
+import random
+
+words=['death', 'fear', 'insomnia', 'lost', 'promise']
+right_word=random.choice(words)
+
+puzzledone=False
+leavepuzzle=False
+
+def puzzle():
+  print('\n\nAs you walk around, you feel a pressure overcoming you- Almost like a blanket of demise.\nIt\'s Nightmare.\n')
+
+  global puzzledone
+  global leavepuzzle
+
+  if puzzledone==False:
+    if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+      print(f'[AH, ARE YOU LEAVING ALREADY? I QUITE ENJOYED YOUR COMPANY. PLEASE, JUST ONE MORE THING.]')    
+    else:
+      print(f'[YOU ARE AIMLESS, {name.upper()}. I DON\'T EVEN WANT TO ADDRESS YOU AS THE DREAMCATCHER. AFTER THEY ABANDONED US FOR YEARS, YOU EXPECT ME TO ACCEPT YOU WITH OPEN ARMS?]\n[DON\'T MAKE ME LAUGH.]\n')
+    print('[TELL ME THE DREAMCATCHER\'S BURDERN.]\n')
+
+    word_choice=input('\nDid you find the previous Dreamcatcher\'s journal? Insert the word that stuck out. (type leave to exit out.)\n\n')
+
+    while word_choice!=right_word:
+      if word_choice=='leave':
+        print('\n[VERY WELL.]\n')
+        leavepuzzle=True
+        return             
+      elif (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+        word_choice=input('[OH? DID YOU GET THAT WRONG JUST TO SPEND TIME WITH ME? I WOULDN\'T MIND IF YOU STAYED HERE FOREVER, AKARI.]\n')   
+      else:
+        word_choice=input(f'[NO. ARE YOU REALLY THE DREAMCATCHER IF YOU CAN\'T TELL CAPITALIZATION IS KEY?]\n')      
+        
+    if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+      print('\n[YES, YES- OF COURSE YOU KNOW, DEAR. I JUST WISH YOU DIDN\'T HAVE TO LEAVE.]\n[THE EXIT IS TO THE RIGHT. DON\'T GET TOO CLOSE TO DREAM IN MY ABSENSE.]\n\n')
+    else:
+      print('\n[AH- SO NOW YOU KNOW. YOUR PERFORMANCE IS PASSABLE, DREAMCATCHER ' + name.upper() + '. I HOPE YOU LEARNED SOMETHING FROM THIS- THE ROLE OF DREAMCATCHER IS NOT ALL IT SEEMS.]\n[KEEP GOING RIGHT, IF YOU TIRE OF MY PALACE AND WISH TO LEAVE.]\n\n')
+    puzzledone=True
+  else:
+    print('[AH, ARE YOU LEAVING? CONTINUE RIGHTWARD, THEN.]')
+    print('You\'re never gonna get used to that feeling you get around him...\n\n')
+
+def journal():
+  print('\n\nYou happen across a journal. The open page reads:\n')
+
+  for each_word in words:
+    if right_word==each_word:
+      print(each_word.capitalize())
+    else:
+      print(each_word)
+
+  print('\nYou continue to read,\n"I wonder which will be my fate- Those are the words given to me by Nightmare. Dream tells me not to worry, though... I\'m going to the exit, which can be found by going down twice and walking rightward until the end."')
+  print('You close the journal.\n\n')
+
+def key():
+  print('ok yeah i was gonna implement a key but im bein too ambitious for a 10 minute project, so heres my story idea. idk i just wanted something that used to belong to the prev dreamcatcher but couldnt think of anything oops. anyways you shouldnt be able to see this?? hey wassup')
+
+
+def nightmare():
+  print('\n\nYou come across a grand study in the castle, Nightmare sitting at the middle desk.')
+
+  if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+    print('\n[AH, YOU CAME. CHAMOMILE?]')
+  elif puzzledone==True:
+    print('\n[AH? HOW INTERESTING- YOU CAN LEAVE THIS PALACE, AND YET YOU CHOOSE TO COME HERE? COME, HAVE SOME EARL GREY.')
+  else:
+    print('\n[YOU HAVE NO BUSINESS HERE. LEAVE.]')
+    print('It seems you don\'t have a choice. Nightmare forces you out.\n\n')
+    return
+  print('A seat and tea manifests, Nightmare inviting you to sit. You promptly do so.')
+  if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+    print('[YOU LOOK AS LOVELY AS EVER. WELL? DID YOU WANT TO DISCUSS SOMETHING? NOT THAT WE NEED ANYTHING TO TALK ABOUT FOR ME TO WANT TO BE AROUND YOU.]\n')
+  else:
+    print('[YOU\'RE A VERY NEW DREAMCATCHER- I ASSUME YOU HAVE A FEW QUESTIONS. HUMOR ME FOR A SPELL.')
+
+  nightresponse=input('Well... (choose one!)\n\nSpire Academy\nDream\nNightmare\nYourself\nNothing\n')
+
+  while nightresponse!='Nothing':
+    if nightresponse=='Spire Academy':
+      if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+        print('\n\n[AH... THAT PLACE I SENT YOU AFTER SEVERING YOUR TIE TO THE ARCHIVE? ...SORRY ABOUT THAT, AGAIN, BUT BY YOUR TONE, YOU\'RE JUST CURIOUS.')
+        print('[AS YOU KNOW, IT\'S A SCHOOL TO TEACH THE ART OF VILLAINY. BUT YOU\'VE GONE THERE BEFORE: YOU KNOW THAT "EVIL" IS A NECESSARY COUNTERPART TO "GOOD".')
+        print('[I SHOULD ACTUALLY BE A STUDENT THERE- I\'M ABOUT THE SAME AGE AS YOU, AKARI. BUT I\'M NOT EVIL- I TAKE CARE OF NIGHTMARES. SO MY ATTENDANCE ISN\'T MANDATORY, EVEN THOUGH IT DOES HELP WHENEVER I RUN OUT OF IDEAS. EITHER WAY, MY RESPONSIBILITIES KEEP ME BUSY.]')
+        print('[AH, I WISH I COULD HAVE SEEN YOU MORE~]')
+      else:
+        print('\n\n[HOW DO YOU KNOW ABOUT THAT? HAHAHA- YOU\'RE VERY INTERESTING, DREAMCATCHER ' + name.upper() + '!\nTHE SPIRE ACADEMY OF VILLAINY AND TREACHERY- IT\'S FULL NAME- SHOULD TELL YOU ALL YOU NEED TO KNOW. I DON\'T RECOMMEND THAT YOU GO. SOMEONE LIKE YOU HAS NO REASON TO.]')
+      nightresponse=input('\n\nSpire Academy\nDream\nNightmare\nYourself\nNothing\n')
+    if nightresponse=='Dream':
+      if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+        print('\n\n[WHY DO YOU BRING HIM UP NOW, AKARI? WHAT MATTERS RIGHT NOW IS YOU AND ME, NOT HIM.]')
+      else:
+        print('\n\n[HE IS MY BROTHER. HE IS ALSO IGNORANT. DON\'T BELIEVE EVERYTHING HE TELLS YOU.]')
+      nightresponse=input('\n\nSpire Academy\nDream\nNightmare\nYourself\nNothing\n')
+    if nightresponse=='Nightmare':
+      if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+        print('\n\n[AH, YOU WANT TO KNOW MORE ABOUT ME~?.]\n[I ENJOY TEA TASTING AND SCULPTING MIND GARDENS. I ALSO ENJOY SPENDING TIME WITH YOU, AKARI.]')
+      else:
+        print('\n\n[I AM THE GUARDIAN OF NIGHTMARES. IT IS A NOBLE AND IMPERATIVE ROLE: I REIN IN THE DANGEROUS NIGHTMARES, AND DELIVER HARSH MESSAGES THROUGH THE MEDIUM OF SLEEP. YOU MAY THINK MY METHODS ARE EXTREME, BUT IT IS NECESSARY.]')
+      nightresponse=input('\n\nSpire Academy\nDream\nNightmare\nYourself\nNothing\n')
+    if nightresponse=='Yourself':
+      if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+        print('\n\n[YOU\'RE VERY INTERESTING, AKARI. I CAN\'T WAIT TO LEARN MORE ABOUT YOU.]')
+      else:
+        print('\n\n[YOU ARE THE DREAMCATCHER. YOU CATCH STRAY DREAMS AND ENSURE THAT THE DENIZENS OF THE MIND DON\'T DESTROY THE COLLECTIVE UNCONSCIOUS. IT IS A HEAVY RESPONSIBILTY, SO DREAM AND HIS TEAM ASSIST YOU. I DO, AS WELL.]')
+      nightresponse=input('\n\nSpire Academy\nDream\nNightmare\nYourself\nNothing\n')
+    else:
+      nightresponse=input('\nNot valid; type a choice on the list exactly as it appears.\n\nSpire Academy\nDream\nNightmare\nYourself\nNothing\n')
+    print('\n\n[AH, ALREADY? VERY WELL, THEN.]\nYou exit the study.\n\n')
+
+
+room = [
+    'xxxxxxxxx',
+    'xxxjx.n.x',
+    'x.......x',
+    'xxx.xxxxx',
+    'x.....pex',
+    'xxxxxxxxx'
+]
+#usable letters: x . p j e n
+
+def move(current_row, current_col, direction):
+  new_row=current_row
+  new_col=current_col
+
+  if direction=='up':
+      new_row-=1
+  elif direction=='down':
+      new_row+=1
+  elif direction=='left':
+      new_col-=1
+  elif direction=='right':
+      new_col+=1
+  else:
+    print(f'Nope, not {direction}. Try up, down, left, or right (no capitalization).')
+      
+  if room[new_row][new_col]=='x': 
+    print('That\'s a wall.')
+    return current_row,current_col
+  if room[new_row][new_col]=='p':
+    global leavepuzzle
+    puzzle()
+    if leavepuzzle==False:
+      return new_row,new_col
+    else:
+      leavepuzzle=False
+      return current_row,current_col
+  if room[new_row][new_col]=='j':
+    journal()
+    return current_row,current_col
+  if room[new_row][new_col]=='n':
+    nightmare()
+    return new_row,new_col
+  return new_row,new_col
+
+def look_walls(current_row, current_col):
+  if room[current_row - 1][current_col]=='x':
+    print('There is a wall up.')
+  if room[current_row + 1][current_col]=='x':
+    print('There is a wall down.')
+  if room[current_row][current_col - 1]=='x':
+    print('There is a wall on your left.')
+  if room[current_row][current_col + 1]=='x':
+    print('There is a wall on your right.')
+
+look_walls(4,3)
+player_row=4
+player_col=3
+
+print('You wake up, dread hitting you immediately. Surrounding you are echoing black marble hallways, with towering pillars of the academia kind. You aren\'t supposed to be here.\n')
+print('From the spiraling marble pillars, a figure appears. The feeling of dread is almost suffocating here. Draped in darkness, you are unable to make out their face.\nThey notice your gaze.\n\n[AH. THE CHARM AROUND YOUR NECK... YOU MUST BE THE NEW DREAMCATCHER.]\n')
+  
+name=input('[TELL ME, WHAT DO THEY CALL YOU NOWADAYS?]\n')
+
+if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+  print(f'\n[{name.upper()}? AH, I DID NOT RECOGNIZE YOU! FORGIVE ME; IT IS QUITE GOOD TO SEE YOU AGAIN, MY DEAR DREAMER. HUMOR ME FOR A SPELL, WILL YOU?]')
+  print('\n[YOU ALREADY KNOW ABOUT THE SECRET OF THE PREVIOUS DREAMCATCHER- ' + right_word + '. THE EXIT IS ON YOUR RIGHT. UNLESS YOU\'D RATHER STAY WITH ME?]\n[GO UP TWICE, RIGHT THRICE, AND UP ONCE MORE. YOU\'LL FIND ME IN MY STUDY.]')
+  print('\n[BY YOUR LEAVE, MY DEAR.]\n')
+else:
+  print(f'\n[{name.upper()}. HOW INTERESTING. AFTER ALL THESE YEARS, A LITTLE FINCH LIKE YOU SHOWS UP.]\n[YOU MAY CALL ME NIGHTMARE- AND I AM NOT GOING TO ALLOW YOU TO LEAVE UNTIL YOU PROVE YOUR WORTH IN THE ROLE YOU HAVE BEEN GIVEN.]')
+  print('\n[THIS IS MY MINDSCAPE: THE PALACE OF NIGHT. THE PREVIOUS DREAMCATCHER HAS LEFT SECRETS DREAM WOULD NEVER TELL YOU.]\n[FIND THEM, AND THEN FIND ME AT THE EXIT. PROVE YOUR WORTH.]\n')
+
+print('The feeling of despair leaves you as the figure disappears. You should look for those so called secrets- Secrets that you figure you\'ll find in the room ahead.\n')
+
+
+while room[player_row][player_col] != 'e': 
+  look_walls(player_row,player_col)
+  direction=input('Where to? (up, down, left, or right)\n')
+  player_row,player_col=move(player_row,player_col,direction)
+
+
+print('\n\nYou come across a large arch in the marble walls. It\'s a portal, it seems- And you step across the threshold.\n')
+print('\n"' + name.capitalize() + '! There you are!"')
+print('\nYou find yourself back in the Dreamcatcher Archives. The warm bookcases reach to the intricate, cloud-covered ceiling. Dream approaches you with a worried smile.')
+print('\n"Where did you go? I hope you aren\'t hurt- I lost you near the nightmares, so I was worried..."')
+print('\n...\n')
+
+if (name=='Ia')or(name=='Kuromiya')or(name=='Akari'):
+  print('Well, that was a fun little visit. Dream can be really overprotective, though... Another night of being the Dreamcatcher passes, and soft thoughts fill you up like bubbles.')
+else:
+  print('After everything you saw, you\'re starting to be wary of Dream- Is all his friendliness a front? What secrets did Nightmare mean? You end up with questions brewing in your mind- But at least you\'re back home.')
+
+print('\n\nTHE END / YOU WIN!')

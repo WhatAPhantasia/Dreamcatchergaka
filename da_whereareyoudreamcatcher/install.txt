@@ -1,0 +1,5 @@
+charset,UTF-8
+type,ghost
+
+name,dA: where are you, dreamcatcher?
+directory,da_whereareyoudreamcatcher
