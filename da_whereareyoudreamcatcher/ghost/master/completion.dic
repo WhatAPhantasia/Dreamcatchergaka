@@ -1,26 +1,53 @@
-//ending event. sets appropriate flags and plays the event. obviously
-OnMazeEnd
+//ending event. plays the event. obviously. no flag needed cuz gamestate is handled by userposition.
+OnMazeEnd : all
 {
+	userposition = (4,7)
 
+	"\*\t"
+	"You come across a large arch in the marble walls. \w8It's a portal, it seems- \w8And you step across the threshold.\x"
+
+	"%(s.init)"
+	"""%(Capitalize(user))! \w8There you are!""\w8\w8\n\n[half]"
+	"You find yourself back in the Dreamcatcher Archives. \w8The warm bookcases reach to the intricate, cloud-covered ceiling. \w8Dream approaches you with a worried smile.\w8\w8\n\n[half]"
+	"""Where did you go? \w8I hope you aren't hurt- \w8I lost you near the nightmares, \w2so I was worried...""\w8\w8\x"
+
+	if IsAkari
+	{
+		"Well, that was a fun little visit! \w8Dream is fine enough to calm down- \w8He knows his brother, after all.\w8\w8\n\n[half]"
+		"Another night of being the Dreamcatcher passes, \w8and soft thoughts fill you up like bubbles.\w8\w8"
+		"\n\n\_q\f[align,right]\f[bold,1]- THANK YOU FOR READING!"
+	}
+	elseif seenallstudy
+	{
+		"You think you have a better understanding of Dream, now- \w8That look on his face is a deep, \w4genuine concern. \w8The only issue was his secrecy, \w4for which you didn't understand.\w8\w8\n\n[half]"
+		"It looks like you're going to have a long talk with Dream.\w8\w8"
+		"\n\n\_q\f[align,right]\f[bold,1]- THANK YOU FOR READING!"
+	}
+	else
+	{
+		"After everything you saw, \w4you're starting to be wary of Dream. \w8Is all his friendliness a front? \w8What secrets did Nightmare mean?\w8\w8\n\n[half]"
+		"You end up with questions brewing in your mind- \w8But at least you're back home.\w8\w8"
+		"\n\n\_q\f[align,right]\f[bold,1]- THANK YOU FOR READING!"
+	}
 }
 
 //handles ending menu.
 OnMenuEnd : all
 {
-	"\b2\_q"
+	"\_q"
 
-	if ARRAYSIZE(installedghostlist) <= 1 {
-		"\![Open Ghost Explorer,OnMenuEnd.Change,explorer]\n"
-		if lastghost != ""; "\![Open Last Ghost,OnMenuEnd.Change,lastghost]\n"
-		if ARRAYSIZE(installedghostlist) >= 3; "\![Open Random Ghost,OnMenuEnd.Change,random]\n"
-		"\![Open Next Ghost,OnMenuEnd.Change,next]\n\n"
+	if ARRAYSIZE(installedghostlist) > 1 {
+		"\![*]\q[Open Ghost Explorer,OnMenuEnd.Change,explorer]\n"
+		if lastghost != ""; "\![*]\q[Open Last Ghost,OnMenuEnd.Change,lastghost]\n"
+		if ARRAYSIZE(installedghostlist) >= 3; "\![*]\q[Open Random Ghost,OnMenuEnd.Change,random]\n"
+		"\![*]\q[Open Next Ghost,OnMenuEnd.Change,next]\n\n"
 	}
 	else
 	{
 		"Looks like you have no other ghosts to boot. Try installing more ghosts!\n\n"
 	}
 
-	"\![Close Ghost,OnClose]  \![Reset,OnReset]"
+	"\![*]\q[Close Ghost,OnClose]  \![*]\q[Reset,OnReset]"
 }
 
 OnMenuEnd.Change
@@ -36,5 +63,31 @@ OnMenuEnd.Change
 //conditional close dialogue depending on where you are in the story.
 OnClose
 {
+	case gamestate
+	{
+		when 1
+		{
 
+		}
+		when 2
+		{
+
+		}
+		when 3
+		{
+
+		}
+		when 4
+		{
+
+		}
+		when 5
+		{
+
+		}
+		others
+		{
+			
+		}
+	}
 }

@@ -10,6 +10,12 @@ OnTranslate
 	
 	//If you want to add anything to OnTranslate, like text replacement, I would put it after this point, generally. Just make sure it's before the TOSTR(_talk)
 	
+	if gamestate != 1
+	{
+		if RE_SEARCH(_talk,"^\\1"); _talk = RE_REPLACE(_talk,"^\\1","\1\![set,balloonwait,105%]")
+		elseif RE_SEARCH(_talk,"^\0"); _talk = RE_REPLACE(_talk,"^\0","\0\![set,balloonwait,105%]")
+	}
+	
 	TOSTR(_talk)
 }
 
@@ -23,48 +29,44 @@ OnAnchorSelect
 OnKeyPress
 {
 	if reference0 == "f1"; "\![open,readme]"
-	elseif gamestate == 0
+	if gamestate == 0
 	{	
 		if reference0 == "up" || reference0 == "left" || reference0 == "right" || reference0 == "down"
-		{"\![OnMove,%(reference0)]"}
+		{"\![raise,OnMove,%(reference0)]"}
 	}
-	
 }
 
 //Happens about 30 seconds after a script ends, by default, to bring them back to normal poses
 OnSurfaceRestore
 {
-	"\1\s[10]\0\s[0]"
+	"%(s.init)"
 }
 
 //Happens when the ghost is unminimized. You *can* include dialogue, but you don't *have* to. I have included this event because if you don't, it defaults to \0\s[0]\1\s[10], which you don't want in some cases, such as if your ghost uses different surfaces or has a different number of characters.
 OnWindowStateRestore
 {
-	"\1\s[10]\0\s[0]"
+	OnSurfaceRestore
 }
 
 s.init
-{
-	//to align the invisible screens to set up balloons
-	"\![reset,sticky-window]\![set,sticky-window,0,1]"
-	//--
-	//if SHIORI3FW.BalloonName == "Closed Solar Captions"
-	//{"\0\![set,balloonoffset,@-250,0]"
-	//--
-	//"\1\s[-1]\![move,--X=0,--Y=0,--base=0,--option=ignore-sticky-window]"
-	//--
-	//"\![set,balloonoffset,-250,-340]"}
-	
-	case gamestate
+{	
+	case SHIORI3FW.EventidOld
 	{
-		when 1; "\0\s[0]" //dream archive
-		when 2; "\0\s[0]" //nightmare study
-		when 3; "\0\s[0]" //journal
-		when 4; "\0\s[0]" //puzzle
-		others; "\0\s[0]" //normal gameplay
+		when "OnFirstBoot", "OnNameTeach"
+		{"\0\s[0]"}
+		others
+		{
+			case gamestate
+			{
+				when 1; "\0\s[50]" //dream archive
+				when 2; "\0\s[20]" //nightmare study
+				when 3; "\0\s[1000]" //journal
+				when 4; "\0\s[0]" //puzzle
+				others; "\0\s[0]" //normal gameplay
+			}
+		}
 	}
-
-	//copied over from celeste!
+	
 }
 
 //Network update url. Make sure you have a / on the end of the url or it will give a warning every time users try to update! If you don't plan to use network updates you can remove this
@@ -105,6 +107,7 @@ On_sakura.recommendsites
 recommendsites_sakura : array
 {
 	"Nightmare's Toyhou.se Page";	"https://toyhou.se/20808237.nightmare"
+	"Dreamcatcher Archives Toyhou.se Folder";	"https://toyhou.se/WhatAPhantasia/characters/folder:3533735"
 }
 
 On_sakura.portalsites 
@@ -140,10 +143,26 @@ username
 	SHIORI3FW.UserName
 }
 
+Capitalize
+{
+	_word = _argv[0] //Sets _word to the word the user sent
+	_buffer = SUBSTR(_word,0,1) //Storing the first character in _buffer
+	_word = ERASE(_word,0,1) //Erasing the first character from _word
+	_word = INSERT(_word,0,TOUPPER(_buffer)) //Making the character in _buffer uppercase and inserting it back into _word
+	_word //Returns the capitalized word
+}
+
 //-----other functions.
 IsAkari
 {
-	if user == "akari" || user == "kuromiya" || user == "ia"; 1
+	_user = CleanTerm(user)
+	if _user == "akari" || _user == "kuromiya" || _user == "ia"; 1
+	else; 0
+}
+
+seenallstudy
+{
+	if Flag("Done.Study.Dream") && Flag("Done.Study.Nightmare") && Flag("Done.Study.Asibikaashi") && Flag("Done.Study.Dreamworld") && Flag("Done.Study.Self.1")&& Flag("Done.Study.Self.2"); 1
 	else; 0
 }
 
@@ -156,6 +175,12 @@ CleanTerm
 	_term = REPLACE(_term,".","") //removes periods
 	_term = REPLACE(_term,"-","") //removes dashes
 	_term
+}
+
+//thank you zi
+BalloonIsOpen
+{
+	"balloon" _in_ var.req.value[ASEARCH("Status",var.req.key)]
 }
 
 //Written by Zichqec https://ukagaka.zichqec.com/
@@ -197,21 +222,21 @@ RemoveFlag //Removes all instances of a flag in the array.
 	}
 }
 
-UnlockFlag //Same but for UnlockFlags.
+MapFlag //Same but for MapFlags.
 {
-	if ASEARCH(_argv[0],UnlockFlags) != -1; 1
+	if ASEARCH(_argv[0],MapFlags) != -1; 1
 	else; 0
 }
 
-RemoveUnlockFlag //Removes all instances of a flag in the array.
+RemoveMapFlag //Removes all instances of a flag in the array.
 {
-	_elements = ASEARCHEX(_argv[0],UnlockFlags)
+	_elements = ASEARCHEX(_argv[0],MapFlags)
 	if ARRAYSIZE(_elements) > 0
 	{
 		for _i = ARRAYSIZE(_elements) - 1; _i >= 0; _i-- //Goes from the end of the list to the start, so the elements stay in the same positions while we erase
 		{
 			_current = _elements[_i]
-			UnlockFlags[_current] = IARRAY
+			MapFlags[_current] = IARRAY
 		}
 	}
 }

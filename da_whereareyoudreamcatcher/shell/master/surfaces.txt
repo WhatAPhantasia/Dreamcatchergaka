@@ -16,7 +16,8 @@ descript
 
 surface0
 {
-	collision0,0,0,130,65,head
+	animation0.interval,runonce
+	animation0.pattern0,interpolate,1000,0,0,0
 	
 	//Example code for blink animation - uncomment if you want it
 	//animation0.interval,random,4

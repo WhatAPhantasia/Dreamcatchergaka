@@ -3,28 +3,37 @@
 //absolutely inaccurate function name. do i care. not really
 OnMazeInit : all
 {
+	if !Flag("Done.Firstboot"); MiscFlags ,= "Done.Firstboot"
+	
     "\t\*"
 
     if IsAkari
     {
-        "%(TOUPPER(user))? \w8\w8AH, \w6I DIDN'T RECOGNIZE YOU! \w8FORGIVE ME; \w6IT IS QUITE GOOD TO SEE YOU AGAIN, \w4MY DEAR DREAMER. \w8\w8HUMOR ME FOR A SPELL, \w4WILL YOU?]\w8\w8\n"
-        "[YOU ALREADY KNOW ABOUT THE SECRET OF THE PREVIOUS DREAMCATCHER- \w8%(TOUPPER(rightword)). \w8\w6THE EXIT IS ON YOUR RIGHT. \w8\w6UNLESS \w8YOU'D RATHER STAY WITH ME?]\w8\w8\n"
+        "[%(TOUPPER(user))? \w8\w8AH, \w6I DIDN'T RECOGNIZE YOU! \w8FORGIVE ME; \w6IT IS QUITE GOOD TO SEE YOU AGAIN, \w4MY DEAR DREAMER. \w8HUMOR ME FOR A SPELL, \w4WILL YOU?]\w8\w8\w8\n\n[half]"
+        "[YOU ALREADY KNOW ABOUT THE SECRET OF THE PREVIOUS DREAMCATCHER- \w8%(TOUPPER(rightword)). \w8\w6THE EXIT IS ON YOUR RIGHT. \w8\w6UNLESS \w8YOU'D RATHER STAY WITH ME?]\w8\w8\n\n[half]"
         "[GO UP TWICE, \w4RIGHT THRICE, \w4AND UP ONCE MORE. \w8\w6YOU'LL FIND ME IN MY STUDY.]\w8\w8\x"
     }
     else 
     {
-        "[AFTER ALL THESE YEARS, \w6A LITTLE FINCH LIKE YOU SHOWS UP.]\w8\w8\n"
-        "[YOU MAY CALL ME NIGHTMARE- \w8AND I AM NOT GOING TO ALLOW YOU TO LEAVE UNTIL YOU PROVE YOUR WORTH IN THE ROLE YOU HAVE BEEN GIVEN.]\w8\w8\n"
-        "[THIS IS MY MINDSCAPE: \w8THE PALACE OF NIGHT. \w8THE PREVIOUS DREAMCATCHER HAS LEFT SECRETS HERE THAT DREAM WOULD NEVER TELL YOU.]\w8\w8\n"
-        "[FIND THEM, \w6AND THEN FIND ME AT THE EXIT. \w8PROVE YOUR WORTH.]\w8\w8\x"
+        "[AFTER ALL THESE YEARS, \w8A LITTLE FINCH LIKE YOU SHOWS UP.]\w8\w8\n\n[half]"
+        "[YOU MAY CALL ME NIGHTMARE- \w8AND I AM NOT GOING TO ALLOW YOU TO LEAVE UNTIL YOU PROVE YOUR WORTH IN THE ROLE YOU HAVE BEEN GIVEN.]\w8\w8\w8\w8\n\n[half]"
+        "[THIS IS MY MINDSCAPE: \w8THE PALACE OF NIGHT. \w8THE PREVIOUS DREAMCATCHER HAS LEFT SECRETS HERE THAT DREAM WOULD NEVER TELL YOU.]\w8\w8\w8\w8\n\n[half]"
+        "[FIND THEM, \w6AND THEN FIND ME AT THE EXIT. \w8\w4PROVE YOUR WORTH.]\w8\w8\x"
     }
 
     "The feeling of despair leaves you as the figure disappears. \w8You should look for those so called secrets- \w8Secrets that you figure you'll find in the room ahead.\w8\w8\x"
-    OnMazeCheck
+	
+	OnMazeNavMenu
 }
 
 //handles game states. my code is mega disorganized
 //removed the story complete flag because i prefer this being handled by user position
+		//0: game in progress
+		//1: game complete
+		//2: in the study
+		//3: journal event
+		//4: puzzle event
+		//5: in a wall (somehow...)
 gamestate
 {
     case room[userposition[0]][userposition[1],"|"]
@@ -35,23 +44,62 @@ gamestate
         when "p"; 4
         when "x"; 5
         others; 0
-        //better to account for all tiles now than later
     }
 }
 
 room {
     "x|x|x|x|x|x|x|x|x,/
-    x|x|x|j|x|.|s|.|x,/
+    x|.|x|j|x|x|s|x|x,/
     x|.|.|.|.|.|.|.|x,/
     x|x|x|.|x|x|x|x|x,/
-    x|.|.|.|.|.|p|e|x,/
+    x|.|.|.|.|p|.|e|x,/
     x|x|x|x|x|x|x|x|x"
 }
 //usable letters: x . p j e s
 //this is a 9x6 grid. starting position is room[4][3,"|"], which is row col.
 
+maze {room[_argv[0]][_argv[1],"|"]}
+
+//i realized i actually kinda like this
+//theres definitely a more efficient way to do this but. eh
+DescribeCurrentRoom : all
+{
+	_temp = TOSTR(userposition)
+	case _temp
+	{
+		when "4,3"
+		{"The room you started in. \nThe ceilings are high, black marble pillars reaching up along the grand hallway to your left and right. A wooden doorframe breaks from the hallway."}
+		when "4,2"
+		{"The hallway continues, the marble tiles endlessly shiny like a mirror world. With no doorways in sight, you feel a strange sense of isolation."}
+		when "4,1"
+		{"The hallway darkens, to a solid and imperceptable shadow. It's impossible to continue further."}
+		when "4,4"
+		{"The hallway continues. A twinkly piano plays something that isn't quite a melody, drifting in from somewhere impossibly far away."}
+		when "4,6"
+		{"dear god please remember to write this"} //TODO: listen to your damn self
+		when "3,3"
+		{"The entryway is short, but decorated with intricate boiserie and shelves. Books, trinkets-- It's hard for your eye to land on anything in particular."}
+		when "2,3"
+		{"The central of a large library, three pathways branching off from the star-shaped embellishment on the wooden floor. The area is clean, almost intimidating, with how all the bookshelves tower over and center around the grand chandelier."}
+		when "2,2"
+		{"Dim lights flicker from sconces on the wall, making the corridor of books less daunting. The shelves are labeled ""DREAMCATCHERS."""}
+		when "2,1"
+		{"The white light of the main chandelier is dim here, and joined with the contents of the shelves, it creates a quiet, intimate feeling in your chest."}
+		when "1,1"
+		{"A nook, both seemingly actively visited and barely touched. There are names you don't recognize. This entire wall of books seem to belong to a Dreamcatcher named Asibikaashi."}
+		when "2,4"
+		{"Dim lights flicker from sconces on the wall, making the corridor of books less daunting. The shelves are labeled ""CELESTIAL BODIES."""}
+		when "2,5"
+		{"Warmer candlelight flickers in from the room to the right."}
+		when "2,6"
+		{"A small waiting room, seemingly well-used. Small and tasteful periodicals are scattered across the main coffee table, the dark upholstery creased from movement."}
+		when "2,7"
+		{"There's a doorway, but no door. \nThe placard reads ""KEEPERS."""}
+	}
+}
+
 //iiiiiiiiii. didn't realize i had to transfer this all to yaya. i might be a little dumb
-OnMove
+OnMove : all
 {
     _newrow = userposition[0]
     _newcol = userposition[1]
@@ -62,65 +110,259 @@ OnMove
         when "down"; _newrow++
         when "left"; _newcol--
         when "right"; _newcol++
-        else
-        {} //this should be impossible and a minor issue if possible, so no error message is needed
     }
 
     //handles visually unlocking tiles on the map.
-    if UnlockFlag("%(_newrow).%(newcol)") == 0; UnlockFlags ,= "%(_newrow).%(newcol)"
-
-    //handles valid map movement.
-    if room[_newrow][_newcol,"|"] == "e"
+    //if MapFlag("%(_newrow).%(_newcol)") == 0; MapFlags ,= "%(_newrow).%(_newcol)"
+	//no longer relevant since i scrapped the whole map idea. navigate the maze in pure dark
+	
+    //handles valid map movement and events
+	//for events, userposition is updated within them when relevant.
+    case maze(_newrow,_newcol)
     {
-        //yeah i'm not doing this the same way as the original project.
-        //i'm making it more complicated but i don't care. i hate loop states
-        //states are managed by what tile the user is on in addition to flags.
-        userposition[0] = _newrow
-        userposition[1] = _newcol
-        OnMazeEnd
-    }
-    elseif room[_newrow][_newcol,"|"] == "x"
-    {
-        nonoverlap:{
-            "That's a wall."
-            "You stop-- \w8There's a wall."
-            "Oh-- \w8That's a wall."
-            "Ouch-- \w8A wall..."
-            "It looks like a wall."
-            "It's a wall."
-            "Oh, a wall."
-            "Looks like a wall."
-            "It looks like its a wall."
-            "There's a wall."
+		when "x"
+		{
+			if reference1 == "menu"; "\![raise,OnMazeNavMenu,wall]"
+			else; "\_q%(WallDialogue)"
+		}
+        when "e"; OnMazeEnd
+        when "p"; OnPuzzle
+        when "j"; OnJournal
+        when "s"; OnStudyEnter
+        others 
+        {
+			userposition[0] = _newrow
+			userposition[1] = _newcol
+            if reference1 == "menu"; OnMazeNavMenu
+            else; "\![raise,OnMazeNavMenu,keypress]"
         }
     }
-    elseif room[_newrow][_newcol,"|"] == "p"
+}
+
+WallDialogue : nonoverlap
+{
+	"That's a wall."
+	"You stop-- There's a wall."
+	"Oh-- That's a wall."
+	"Ouch-- A wall."
+	"It looks like a wall."
+	"It's a wall."
+	"Oh, a wall."
+	"Looks like a wall."
+	"It looks like its a wall."
+	"There's a wall."
+}
+
+//function that runs after directional input. tells user about whats in front, behind, and beside them.
+OnMazeCheck : all
+{
+    //TODO: make surface check to see if map isnt open, to fade in the map.
+	
+    _up = userposition[0]
+	_up--
+    _down = userposition[0]
+	_down++
+    _left = userposition[1]
+	_left--
+    _right = userposition[1]
+	_right++
+
+    "\0\![set,autoscroll,disable]"
+
+    //conditional dialogue here.
+    //i'm not making this more complicated than it needs to be by doing a for loop to make this more succinct. it makes sense and is more glanceably legible this way imo
+	if reference0 == "wall"
+	{
+		WallDialogue
+		"\n\n[half]"
+	}
+	
+    case maze(_up,userposition[1])
+	{ 
+		when "x"
+        {"There's a wall ahead.\n"}
+		when "s", "j"
+        {"There's something of interest ahead.\n"}
+		when "p"
+        {"There's a familiar, heavy presence ahead.\n"}
+		when "e"
+        {"You can see a warm light ahead.\n"}
+	}
+    case maze(_down,userposition[1])
     {
-        //position is changed in the function below when user solves the puzzle, as a failsafe.
-        OnPuzzle
+        when "x"
+        {"There's a wall behind.\n"}
+        when "s", "j"
+        {"There's something of interest behind.\n"} //literally inaccessible
+        when "p"
+        {"There's a familiar, heavy presence behind.\n"}
+        when "e"
+        {"You can sense a warm light behind.\n"}
     }
-    elseif room[_newrow][_newcol,"|"] == "j"
+    case maze(userposition[0],_left)
     {
-        OnJournal
+        when "x"
+        {"There's a wall to the left.\n"}
+        when "s", "j"
+        {"There's something of interest to the left.\n"}
+        when "p"
+        {"There's a familiar, heavy presence to the left.\n"}
+        when "e"
+        {"You can see a warm light to the left.\n"}
     }
-    elseif room[_newrow][_newcol,"|"] == "s"
+    case maze(userposition[0],_right)
     {
-        userposition[0] = _newrow
-        userposition[1] = _newcol 
-        //^ like for "e", position is updated here because current state is managed by the tile the user's on.
-        OnStudyEnter
+        when "x"
+        {"There's a wall to the right.\n"}
+        when "s", "j"
+        {"There's something of interest to the right.\n"}
+        when "p"
+        {"There's a familiar, heavy presence to the right.\n"}
+        when "e"
+        {"You can see a warm light to the right.\n"}
     }
-    else
-    {
-        userposition[0] = _newrow
-        userposition[1] = _newcol
-        if reference1 == "menu"; OnMazeNavMenu
-    }
+	
+    //if reference0 != "menu"
+	//"\n\f[anchor.font.color,disable]\![*]\_a[OnEnableMazeCheck]Enable/Disable Observations\_a"
 }
 
 OnMazeFix : all
 {
     userposition = (4,3)
     "\t\*That's strange. \w8It doesn't seem like you're supposed to be here... \w8\w4As soon as you blink, \w6you're right back to where you started.\w8\w8\n\n"
-    "\![Continue Onwards,OnMazeNavMenu]"
+    "\!\q[Continue Onwards,OnMazeNavMenu]"
+}
+
+//--------------
+
+//when you enter the journal tile. conditional, remember to set appropriate flags.
+OnJournal : all
+{
+    if !Flag("Met.Journal"); MiscFlags ,= "Met.Journal"
+
+    "\b2\*\t"
+    "It's a lectern you approach, a comparatively humble and shabby journal set on its intricate metalworking. \w8The open page reads:\w8\w8\n\n[half]\_q"
+
+    foreach keywords; _word
+    {
+        if _word == rightword; "%(Capitalize(_word))\n"
+        else; "%(_word)\n"
+    } 
+    
+    "\_q\w8\w8\n[half]""I wonder which one will be my fate,"" \w8the journal reads. \w8""Those are the words given to me by Nighmare. \w8Dream starts acting strange when I ask her what Nightmare meant by them, and she never acts like this. \w8\w8She says she's trying to protect me, \w8but is that the face you make at someone you want to protect?""\w8\w8\n\n[half]"
+    """I'm going to leave this place. \w8Down two steps, right until the gate... \w8\w8It's always so confusing here. \w8But \w8it's the only place she can't see me, \w8I suppose.""\w8\w8\x"
+	
+	OnMazeNavMenu
+}
+
+//when you enter the puzzle tile. conditional, remember to set appropriate flags.
+OnPuzzle : all
+{
+    _one = ""; _two = "\_q"
+    if reference0 == "restore" 
+    {_one = "\_q"; _two = ""}
+
+    if !Flag("Done.Puzzle")
+    {
+		userposition = (4,5)
+        if !Flag("Met.Puzzle"); MiscFlags ,= "Met.Puzzle"
+
+        "%(_one)\b2\t\*"
+		
+		"As you go down the hallway, the dark blanket of despair descends on you again. \w8\w8Nightmare is waiting for you here- \w8\w8It's the way out.\w8\w8\w8\n\n\"
+
+        if IsAkari;  "[AH, ARE YOU LEAVING ALREADY? \w8I QUITE ENJOYED YOUR COMPANY. \w8\w8PLEASE, \w8JUST ONE MORE THING.]"
+        else; "[YOU ARE AIMLESS, \w4%(TOUPPER(user)). \w8I DON'T EVEN WANT TO ADDRESS YOU AS THE DREAMCATCHER. \w8AFTER THEY ABANDONED US FOR YEARS, \w6YOU EXPECT ME TO ACCEPT YOU WITH OPEN ARMS? \w8\w8DON'T MAKE ME LAUGH.]"
+        
+        "\w8\w8\n\n[half]\f[bold,1]\[TELL ME THE DREAMCATCHER'S BURDEN.]"
+		"\w8\w8\n\n\f[bold,0]\![open,inputbox,OnPuzzleAnswer,-1]"
+        
+        if Flag("Met.Journal"); "There was a word that stuck out in that journal, you swear."
+        else; "...Maybe you missed something in the castle. \w8\w8The Dreamcatcher's Burden?"
+
+        "\w8\w8%(_two)\n\n\![*]\q[Leave,OnPuzzleLeave]"
+    }
+    else
+    {
+        "Nightmare isn't here anymore. \w8"
+		
+		if !Flag("Done.Study") && !Flag("Met.Study"); "You get a feeling he might be somewhere in the library, \w4actually... \w8You feel hopelessly confused about what the words in that journal even meant."
+		elseif Flag("Met.Study"); "You feel weirdly incomplete- \w8You didn't get all the answers from Nightmare in his study. \w8About what the words in the journal even meant, \w4and who he thinks you are..."
+		else; "Which is expected, \w4of course. \w8He's finishing his tea."
+		
+		if userposition == (4,6)
+		{userposition = (4,4)}
+		else
+		{userposition = (4,6)
+		" \w8\w8Well, \w4you're leaving!"}
+		
+		"\w8\x"
+    }
+}
+
+OnPuzzleAnswer : all
+{
+	if CleanTerm(reference0) == rightword
+	{
+		if !Flag("Done.Puzzle"); MiscFlags ,= "Done.Puzzle"
+		userposition = (4,6)
+		
+		if IsAkari
+		{
+			"[YES, YES- \w8OF COURSE YOU KNOW, \w4DEAR. \w8I QUITE ENJOYED YOUR COMPANY. \w8PLEASE, \w4JUST ONE MORE THING.]\w8\w8\n\n[half]"
+			"\[THE EXIT IS TO THE RIGHT. \W8DON'T GET TOO COZY WITH DREAM IN MY ABSENCE.]"
+		}
+		else
+		{
+			"[AH. \w8SO NOW YOU SEE.]\w8\w8\n\n[half]"
+			"[YOUR PERFORMANCE IS PASSABLE, \w4DREAMCATCHER %(TOUPPER(user)). \w8\w8IN HUMORING ME, YOU'VE SHOWN ME THE BARE MINIMUM: \w8THE ABILITY TO LISTEN, \w4THE PATIENCE TO WATCH, \w4AND THE SCRUTINY TO KEEP AN EYE ON YOUR ALLIES.]\w8\w8\w8\n\n"
+			"\[BELIEVE ME. \w8IT'S A RARE GRACE.]\w8\w8\w8\n\n"
+			"\[KEEP GOING RIGHT, \w4IF YOU TIRE OF MY PALACE AND WISH TO LEAVE.]"
+		}
+		
+		"\w8\x"
+	}
+	else
+	{
+		puzzlelosercount++
+		
+		if IsAkari
+		{
+			nonoverlap_pool
+			{
+				"[OH? \w8DID YOU GET THAT WRONG JUST TO SPEND TIME WITH ME? \w8I WOULDN'T MIND IF YOU STAYED HERE FOREVER, AKARI.]"
+				"[OH, \w4YOU'RE IMPOSSIBLE TO FIGHT WHEN YOU GET THAT SMIRK ON YOUR FACE... \W8NOT THAT I MIND.]"
+				"[PLEASE, \w4AKARI. \w8IF YOU WANT TO TALK TO ME, \w4WOULDN'T YOU RATHER GO TO MY STUDY INSTEAD?]"
+				if puzzlelosercount >= 4
+				{
+					"[YOU ARE BEING... \w8VERY PARTICULARLY ENIGMATIC TODAY, AREN'T YOU, DEAR? \w8NO, NO, NOTHING BY IT...]"
+				}
+			}
+		}
+		else
+		{
+			nonoverlap_pool
+			{
+				"[NO. OF COURSE, YOU MISS THE CAPITAL KEY.]"
+				"[NO. YOU'RE HARDLY OBSERVANT, EVEN OVER SOMETHING SO CAPITAL...]"
+				"[NO. YOU CAN'T SEEM TO GRASP THE ELEVATED, UPPER CASE OF YOUR ROLE.]"
+				if puzzlelosercount >= 4
+				{
+					"[ARE YOU... \w8TRYING TO AGGRAVATE ME? \w8REJOICE, DREAMER. \w8YOU'RE ONLY BAFFLING ME.]"
+					"[YOU... \w8YOU'RE A LOST CAUSE. \w8DID THAT DARK, SUSPICIOUS JOURNAL IN THE NORTH ROOM CAREEN RIGHT OVER YOUR CRANIUM?]"
+				}
+			}
+		}
+		
+		"\w8\x\![raise,OnPuzzle,restore]"
+	}
+}
+
+OnPuzzleLeave
+{
+    userposition = (4,4)
+    "\![close,inputbox,__SYSTEM_ALL_INPUT__]"
+	--
+    "[VERY WELL.]"
+	"[HMPH. AT YOUR LEAVE.]"
 }

@@ -3,58 +3,86 @@ OnFirstBoot : all
 	//Initialized variables.
 	//Yes, this randomizes every reset on purpose, so you can play with any possibility you want to without being kept back by what you did in your first playthrough. No continuity sorry </3
 	user = "dear"
+	stroke = 0
 	rightword = keywords[RAND(4)]
 	userposition = (4,3) //row, column
-	gamestate = 0
-		//0: game in progress
-		//1: game complete
-		//2: in the study
-		//3: journal event
-		//4: puzzle event
-		//5: in a wall (somehow...)
 	MiscFlags = IARRAY
 		//flags:
+		//
+		//Done.Firstboot
+		//	i have reinvented the firstboot variable LMAO
 		//
 		//Met.Journal
 		//	when user first sees the old dreamcatcher's journal
 		//
 		//Met.Study
 		//	when user first enters the study
-		//Asked.Study.[Topic]
+		//Done.Study.[Topic]
 		//	for each topic asked. theres a variable (seenallstudy) that marks true once all topics are asked
-		//	it doesn't reset every reset. that'd be kinda annoying yeah
 		//
 		//Met.Puzzle
 		//	when user first enters the p plot 
-		//Complete.Puzzle
+		//Done.Puzzle
 		//	when user gives nightmare the correct answer to finish the p plot
 		//
-	UnlockFlags = IARRAY
+	//MapFlags = IARRAY
 		//Handles visual unlocking of map.
 		//Flags include every single visible tile.
 		//Flags are "0.1","0.2","0.3", etc. Multidimensional array with period as the delim.
+		//scrapped
+		
+	//gamestate
+		//handled by a function in maze.dic
+		//0: game in progress
+		//1: game complete
+		//2: in the study
+		//3: journal event
+		//4: puzzle event
+		//5: in a wall (somehow...)
+		
+	puzzlelosercount = 0
+		//because this is immensely fucking funny to keep track of (especially considering that the "puzzle" is INSIGNIFICANTLY easy)
+	teapreference = "Plain"
+		//honestly why not. maybe i want to use this info again. who knows
 	
-	"\b2\t\*" //make sure to add cutscene specific surfaces here instead of falling back on s.init
-	"You wake up, dread hitting you immediately. \w8Surrounding you are echoing black marble hallways, with towering pillars of the academia kind. \w8\w8You aren't supposed to be here.\n"
-	"From the spiraling marble pillars, a figure appears. \w8The feeling of dread is almost suffocating here. \w8Draped in darkness, \w6you are unable to make out their face.\w8\w8\n"
-	"They notice your gaze.\w8\w8\x"
+	"\b2\t\*" 
+	//make sure to add cutscene specific surfaces here instead of falling back on s.init
+	//ok genius explain what i do when the user minimizes them
+	"%(s.init)" //TODO: replace later
+	
+	"You wake up, \w4dread hitting you immediately. \w8Surrounding you are echoing black marble hallways, \w4lined with intimidating, towering pillars. \w8\w8You aren't supposed to be here.\w8\w8\w8\n\n[half]"
+	
+	"From the spiraling marble pillars, \w8a figure appears. \w8\w8The feeling of dread is almost suffocating here. \w8\w8Draped in darkness, \w6you are unable to make out their face.\w8\w8\w8\n\n[half]"
+	"They notice your gaze.\w8\w8\w8\x"
 
-	"[AH. \w8THE KEY AROUND YOUR NECK... \w8\w8YOU MUST BE THE NEW DREAMCATCHER.]\x[noclear]\n\n"
-	"[TELL ME, \w8WHAT DO THEY CALL YOU NOWADAYS?]\w8\w8"
+	"\[AH. \w8THE KEY AROUND YOUR NECK... \w8\w8YOU MUST BE THE NEW DREAMCATCHER.]\w8\w8\w8\w8\n\n[half]"
+	"[TELL ME, \w8WHAT DO THEY CALL YOU NOWADAYS?]\w8\w8\w8"
 
 	"\0\![open,inputbox,OnNameTeach,-1,--reference=firstboot,--reference=1]\_l[-10000,-10000]\*\q[ ,__FIRST_BOOT__]"
 }
 
+OnInitialize
+{
+	if !ISVAR("user"); user = "dear"
+	if !ISVAR("stroke"); stroke = 0
+	if !ISVAR("rightword"); rightword = keywords[RAND(4)]
+	if !ISVAR("userposition"); userposition = (4,3)
+	if !ISVAR("MiscFlags"); MiscFlags = IARRAY
+	//if !ISVAR("MapFlags"); MapFlags = IARRAY
+	
+	if !ISVAR("puzzlelosercount"); puzzlelosercount = 0
+	if !ISVAR("teapreference"); reapreference = "Plain"
+}
+
 OnReset : all
 {
-	"Your hand traces the bookshelf, until you reach a dark-leather book bound in gold clasps. \w8\w8\nAre you sure you want to reset? \w8Things won't the exact same way you remember.\w8\w8\q\n\n"
-	"\![Open the book,OnReset.Confirm]  \![Go back,OnMenuEnd]"
+	"Your hand traces the bookshelf, until you reach a dark-leather book bound in gold clasps. \w8\w8\nAre you sure you want to reset? \w8Things won't the exact same way you remember.\w8\w8\_q\n\n"
+	"\![*]\q[Open the book,OnReset.Confirm]  \![*]\q[Go back,OnMenuEnd]"
 }
 
 OnReset.Confirm
 {
-	"\t\*You take care to open the book, tracing a finger along the worn gold on the spine.\w8\w8\n\nIt's about time you recalled what he said.\w8\x"
-	OnFirstBoot
+	"\t\*You take care to open the book, tracing a finger along the worn gold on the spine.\w8\w8\n\nIt's about time you recalled what he said.\w8\x\![raise,OnFirstBoot]"
 }
 
 OnGhostChanged
@@ -62,45 +90,42 @@ OnGhostChanged
 	lastghost = reference0
 }
 
-OnBoot
+OnBoot : all
 {	
-	case gamestate
+	if !Flag("Done.Firstboot")
+	{OnFirstBoot}
+	else
 	{
-		when 0
+		"%(s.init)"
+		
+		//TODO: add fade in?
+		
+		case gamestate
 		{
-
-		}
-		when 1
-		{
-			"You've returned to the Archive. \w8Would you like to revisit this memory?\w8\w8\n\q\n\![Yes,OnReset]  \![No,OnMenuEnd]"
-		}
-		when 2
-		{
-
-		}
-		when 3
-		{
-
-		}
-		others
-		{
-
+			when 1
+			{
+				"You've returned to the Archive. \w8Would you like to revisit this memory?\w8\w8\n\_q\n\![*]\q[Yes,OnReset]  \![*]\q[No,OnMenuEnd]"
+			}
+			when 2
+			{
+				"\![set,balloonwait,105%]"
+				"Slowly, \w8as if you never left, \w8Nightmare fades into your view. \w8He raises a brow, \w8seemingly at your cognizant gaze.\w8\w8\w8\n\n[half]"
+				"\[WELL? \w8IS THERE ANYTHING ELSE YOU'D LIKE TO ASK?]"
+			}
+			others //3 and 4 are literally unaccountable for and 5 is a gamestate that should get fixed. 
+			{
+				"Slowly, \w8as if you never left, \w8Nightmare's castle fades back into view. \w8\w8"
+				
+				if !Flag("Done.Puzzle"); "You still need to find the exit and ""prove your worth"" to Nightmare, \w8supposedly."
+				else; "You fulfilled Nightmare's request and are free to leave at any time- \w8But still, \w4you linger."
+				
+				"\w8\w8\n\_q\n\![*]\q[Back to it then.,OnMazeNavMenu]"
+			}
 		}
 	}
 }
 
-//iii think.... i wanted to fix the shell if the shell/bloon were somehow changed but tbh i dont want to do this rn so we'll put it off
-OnShellChanged
-{
-	
-}
-
-OnBalloonChanged
-{
-	
-}
-
-OnNameTeach
+OnNameTeach : all
 {
 	//reference0: input
 
@@ -108,37 +133,32 @@ OnNameTeach
 	_tempname = CUTSPACE(reference.raw[0]) //this stores the original name in _tempname
 	_name = CleanTerm(reference.raw[0])
 	
-	"\_l[-10000,-10000]\q[ ,__FIRST_BOOT__]\_l[0,0]\*\t" //Prevents balloon from timing out if this is during first boot. Also prevents the user from closing out the input box
-	
 	if _name == "akari" || _name == "kuromiya" || _name == "ia"
 	{
 		user = SHIORI3FW.EscapeAllTags(_tempname)
-		OnMazeInit
 	}
 	elseif _name == "nightmare" || _name == "nightmarekeeper" || _name == "nighty" || _name == "mare"
 	{
 		user = SHIORI3FW.EscapeAllTags(_tempname)
-		"\t\*[OH, \w8TRULY? \w8\w8IT IS A NICE NAME, \w4ISN'T IT?]\w8\w8\x"
-		OnMazeInit
+		"\t\*[OH, \w8TRULY? \w8IT IS A NICE NAME, \w4ISN'T IT?]\w8\w8\x"
 	}
 	elseif _name == "dream" || _name == "dreamkeeper" || _name == "dreamy"
 	{
         user = SHIORI3FW.EscapeAllTags(_tempname)
-		"\t\*[HA. \w8\w8I WILL SAY, \w8IF YOUR NAME IS THE SAME AS HIS, \w8THIS IS ALREADY A TERRIBLE FIRST IMPRESSION.]\w8\w8\x"
-		OnMazeInit
+		"\t\*[HA. \w8I WILL SAY, \w8IF YOUR NAME IS THE SAME AS HIS, \w8THIS IS ALREADY A TERRIBLE FIRST IMPRESSION.]\w8\w8\x"
 	}
 	elseif _name == ""
 	{
 		user = "dear"
 		"\t\*[...HA. \w8I SUPPOSE I CAN CALL YOU WHATEVER I PLEASE. \w8VERY WELL.]\w8\x"
-		OnMazeInit
 	}
 	else
 	{
         user = SHIORI3FW.EscapeAllTags(_tempname)
 		"\t\*[%(TOUPPER(user)). \w8HOW INTERESTING.]\w8\w8\x"
-		OnMazeInit
 	}
+	
+	OnMazeInit
 }
 
 //using input cancel for firstboot, from x. template
@@ -147,10 +167,13 @@ OnUserInputCancel
 	//OnNameTeach, close, , firstboot
 	//"%(reference0)\n%(reference1)\n%(reference2)\n%(reference3)"
 
-	if reference0 == "OnNameTeach" && reference3 == "firstboot"
+	if reference0 == "OnNameTeach"
 	{
 		user = "dear"
-		"\t\*[...HA. \w8I SUPPOSE I CAN CALL YOU WHATEVER I PLEASE. \w8VERY WELL.]\w8\x"
-		OnMazeInit
+		"\t\*[...HA. \w8\w8I SUPPOSE I CAN CALL YOU WHATEVER I PLEASE. \w8\w8VERY WELL.]\w8\x\![raise,OnMazeInit]"
+	}
+	if reference0 == "OnPuzzle"
+	{
+		"\![raise,OnPuzzle,restore]"
 	}
 }
