@@ -1,0 +1,51 @@
+charset,UTF-8
+version,1
+option,DisableNoDefineSurfaces
+
+group,__disabled
+{
+	11,__parts
+	12,__parts
+	13,__parts
+	14,__parts
+	15,__parts
+	16,__parts
+	17,__parts
+	18,__parts
+	19,__parts
+}
+
+group,N.Stand
+{
+	scope,0
+	//Scope is the character this group of surfaces belongs to, in this case the Sakura
+	
+	0,Neut
+	1,Ugh
+	2,Smile
+}
+group
+{
+	scope,1
+	10,null
+}
+group,N.Study
+{
+	scope,0
+
+	20,Neut
+	21,Ugh
+	22,Smile
+}
+group,Props
+{
+	scope,0
+	40,Flame
+	42,Lectern
+}
+group,D.Stand
+{
+	scope,0
+	50,Worry
+	52,Relief
+}

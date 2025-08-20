@@ -12,6 +12,6 @@ craftmanurl,https://whataphantasia.github.io/projects/ukagaka
 sakura.name,NightmArekeeper
 kero.name,NightmArekeeper's Castle
 
-icon,dreamcatcherArchives.ico
+icon,icon.ico
 
 sstp.allowunspecifiedsend,0

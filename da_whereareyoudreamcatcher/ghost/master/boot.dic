@@ -45,20 +45,25 @@ OnFirstBoot : all
 	teapreference = "Plain"
 		//honestly why not. maybe i want to use this info again. who knows
 	
-	"\b2\t\*" 
-	//make sure to add cutscene specific surfaces here instead of falling back on s.init
-	//ok genius explain what i do when the user minimizes them
-	"%(s.init)" //TODO: replace later
+	"\t\*" 
 	
-	"You wake up, \w4dread hitting you immediately. \w8Surrounding you are echoing black marble hallways, \w4lined with intimidating, towering pillars. \w8\w8You aren't supposed to be here.\w8\w8\w8\n\n[half]"
+	"\![reset,sticky-window]\![set,sticky-window,0,1]" 
+	"\0\s[10]\![move,--X=0,--Y=0,--base=0,--option=ignore-sticky-window]"
+	"\1\s[1000]\![move,--X=0,--Y=0,--base=0,--option=ignore-sticky-window]"
+	
+	"%(fadein)\0\b2"
+	
+	"You wake up, \w4dread hitting you immediately. \w8Surrounding you are echoing black marble hallways, \w4lined with intimidating, towering pillars. \w8\w8You aren't supposed to be here.\w8\n\n[half]"
+	
+	"\s[0]\i[1000]%(fadein)"
 	
 	"From the spiraling marble pillars, \w8a figure appears. \w8\w8The feeling of dread is almost suffocating here. \w8\w8Draped in darkness, \w6you are unable to make out their face.\w8\w8\w8\n\n[half]"
-	"They notice your gaze.\w8\w8\w8\x"
+	"\s[0]\i[1001]They notice your gaze.\w8\w8\w8\x"
 
-	"\[AH. \w8THE KEY AROUND YOUR NECK... \w8\w8YOU MUST BE THE NEW DREAMCATCHER.]\w8\w8\w8\w8\n\n[half]"
-	"[TELL ME, \w8WHAT DO THEY CALL YOU NOWADAYS?]\w8\w8\w8"
+	"\s[0]\i[51]\i[103]\[AH. \w8THE KEY AROUND YOUR NECK... \w8\w8\s[1]\i[93]\i[104]YOU MUST BE THE NEW DREAMCATCHER.]\w8\w8\w8\w8\n\n[half]"
+	"\s[0]\i[51]\i[106][TELL ME, \w8WHAT DO THEY CALL YOU NOWADAYS?]\w8\w8"
 
-	"\0\![open,inputbox,OnNameTeach,-1,--reference=firstboot,--reference=1]\_l[-10000,-10000]\*\q[ ,__FIRST_BOOT__]"
+	"\0\![open,inputbox,OnNameTeach,-1,--reference=firstboot,--reference=1]\_l[-10000,-10000]\*\q[ ,]"
 }
 
 OnInitialize
@@ -82,7 +87,7 @@ OnReset : all
 
 OnReset.Confirm
 {
-	"\t\*You take care to open the book, tracing a finger along the worn gold on the spine.\w8\w8\n\nIt's about time you recalled what he said.\w8\x\![raise,OnFirstBoot]"
+	"\t\*You take care to open the book, tracing a finger along the worn gold on the spine.\w8\w8\n\nIt's about time you recalled what he said.\w8\x%(fadeout)\1%(fadeout)\0\![raise,OnFirstBoot]"
 }
 
 OnGhostChanged
@@ -98,23 +103,20 @@ OnBoot : all
 	{
 		"%(s.init)"
 		
-		//TODO: add fade in?
-		
 		case gamestate
 		{
 			when 1
 			{
-				"You've returned to the Archive. \w8Would you like to revisit this memory?\w8\w8\n\_q\n\![*]\q[Yes,OnReset]  \![*]\q[No,OnMenuEnd]"
+				"You've returned to the Archive. \w8Would you like to revisit this memory?\w8\w8\n\_q\n\![*]\q[Start from the beginning!,OnReset]\n\![*]\q[Go to the menu,OnMenuEnd]"
 			}
 			when 2
 			{
-				"\![set,balloonwait,105%]"
-				"Slowly, \w8as if you never left, \w8Nightmare fades into your view. \w8He raises a brow, \w8seemingly at your cognizant gaze.\w8\w8\w8\n\n[half]"
+				"Slowly, \w8as if you never left, \w8Nightmare fades into your view. \w8\w8\i[51]\i[92]He raises a brow, \w8seemingly at your cognizant gaze.\w8\w8\w8\n\n[half]"
 				"\[WELL? \w8IS THERE ANYTHING ELSE YOU'D LIKE TO ASK?]"
 			}
 			others //3 and 4 are literally unaccountable for and 5 is a gamestate that should get fixed. 
 			{
-				"Slowly, \w8as if you never left, \w8Nightmare's castle fades back into view. \w8\w8"
+				"Slowly, \w8as if you never left, \w8Nightmare's castle fades back into view. \w8\w8\n\n[half]"
 				
 				if !Flag("Done.Puzzle"); "You still need to find the exit and ""prove your worth"" to Nightmare, \w8supposedly."
 				else; "You fulfilled Nightmare's request and are free to leave at any time- \w8But still, \w4you linger."
@@ -136,41 +138,44 @@ OnNameTeach : all
 	if _name == "akari" || _name == "kuromiya" || _name == "ia"
 	{
 		user = SHIORI3FW.EscapeAllTags(_tempname)
+		
+		OnMazeInit
+		return
 	}
 	elseif _name == "nightmare" || _name == "nightmarekeeper" || _name == "nighty" || _name == "mare"
 	{
 		user = SHIORI3FW.EscapeAllTags(_tempname)
-		"\t\*[OH, \w8TRULY? \w8IT IS A NICE NAME, \w4ISN'T IT?]\w8\w8\x"
+		"\t\*\s[2]\i[51]\i[93]\i[105]\i[203][OH, \w8TRULY? \w8\w8\s[2]\i[53]\i[105]\i[203]IT IS A NICE NAME, \w4ISN'T IT?]"
 	}
 	elseif _name == "dream" || _name == "dreamkeeper" || _name == "dreamy"
 	{
         user = SHIORI3FW.EscapeAllTags(_tempname)
-		"\t\*[HA. \w8I WILL SAY, \w8IF YOUR NAME IS THE SAME AS HIS, \w8THIS IS ALREADY A TERRIBLE FIRST IMPRESSION.]\w8\w8\x"
+		"\t\*\s[1]\i[51]\i[105][HA. \w8I WILL SAY, \w8IF YOUR NAME IS THE SAME AS HIS, \w8THIS IS ALREADY A TERRIBLE FIRST IMPRESSION.]"
 	}
 	elseif _name == ""
 	{
 		user = "dear"
-		"\t\*[...HA. \w8I SUPPOSE I CAN CALL YOU WHATEVER I PLEASE. \w8VERY WELL.]\w8\x"
+		"\t\*\s[2]\i[51]\i[93]\i[105][...HA. \w8I SUPPOSE I CAN CALL YOU WHATEVER I PLEASE. \w8VERY WELL.]"
 	}
 	else
 	{
         user = SHIORI3FW.EscapeAllTags(_tempname)
-		"\t\*[%(TOUPPER(user)). \w8HOW INTERESTING.]\w8\w8\x"
+		"\t\*\s[0]\i[51]\i[106][%(TOUPPER(user))...]"
 	}
+	
+	"\w8\w8\w8\n\n[half]\s[1]\i[51]\i[93]\i[105][AFTER ALL THESE YEARS, \w8A LITTLE FINCH LIKE YOU SHOWS UP.]\w8\w8\x"
 	
 	OnMazeInit
 }
 
-//using input cancel for firstboot, from x. template
 OnUserInputCancel
 {
-	//OnNameTeach, close, , firstboot
+	//OnNameTeach, close, , 
 	//"%(reference0)\n%(reference1)\n%(reference2)\n%(reference3)"
 
 	if reference0 == "OnNameTeach"
 	{
-		user = "dear"
-		"\t\*[...HA. \w8\w8I SUPPOSE I CAN CALL YOU WHATEVER I PLEASE. \w8\w8VERY WELL.]\w8\x\![raise,OnMazeInit]"
+		"\![raise,OnNameTeach,]"
 	}
 	if reference0 == "OnPuzzle"
 	{

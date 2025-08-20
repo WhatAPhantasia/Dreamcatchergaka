@@ -9,19 +9,22 @@ OnMazeInit : all
 
     if IsAkari
     {
-        "[%(TOUPPER(user))? \w8\w8AH, \w6I DIDN'T RECOGNIZE YOU! \w8FORGIVE ME; \w6IT IS QUITE GOOD TO SEE YOU AGAIN, \w4MY DEAR DREAMER. \w8HUMOR ME FOR A SPELL, \w4WILL YOU?]\w8\w8\w8\n\n[half]"
-        "[YOU ALREADY KNOW ABOUT THE SECRET OF THE PREVIOUS DREAMCATCHER- \w8%(TOUPPER(rightword)). \w8\w6THE EXIT IS ON YOUR RIGHT. \w8\w6UNLESS \w8YOU'D RATHER STAY WITH ME?]\w8\w8\n\n[half]"
+        "\s[0]\i[92]\i[105][%(TOUPPER(user))? \w8\w8\s[2]\i[93]\i[103]AH, \w6I DIDN'T RECOGNIZE YOU! \w8\w8\i[52]FORGIVE ME; \w8\w8\s[2]\i[53]\i[104]IT IS QUITE GOOD TO SEE YOU AGAIN, \w4MY DEAR DREAMER. \w8\w8\s[2]\i[93]\i[104]HUMOR ME FOR A SPELL, \w4WILL YOU?]\w8\w8\w8\n\n[half]"
+        "\s[2]\i[51]\i[106][YOU ALREADY KNOW ABOUT THE SECRET OF THE PREVIOUS DREAMCATCHER- \w8\w8\![anim,stop,51]\i[52]%(TOUPPER(rightword)). \w8\w8THE EXIT IS ON YOUR RIGHT. \w8\w8\w8\![anim,stop,52]\i[51]UNLESS \w8\w8\s[2]\i[51]\i[93]\i[105]YOU'D RATHER STAY WITH ME?]\w8\w8\w8\s[2]\i[53]\i[105]\n\n[half]"
         "[GO UP TWICE, \w4RIGHT THRICE, \w4AND UP ONCE MORE. \w8\w6YOU'LL FIND ME IN MY STUDY.]\w8\w8\x"
     }
     else 
     {
-        "[AFTER ALL THESE YEARS, \w8A LITTLE FINCH LIKE YOU SHOWS UP.]\w8\w8\n\n[half]"
-        "[YOU MAY CALL ME NIGHTMARE- \w8AND I AM NOT GOING TO ALLOW YOU TO LEAVE UNTIL YOU PROVE YOUR WORTH IN THE ROLE YOU HAVE BEEN GIVEN.]\w8\w8\w8\w8\n\n[half]"
-        "[THIS IS MY MINDSCAPE: \w8THE PALACE OF NIGHT. \w8THE PREVIOUS DREAMCATCHER HAS LEFT SECRETS HERE THAT DREAM WOULD NEVER TELL YOU.]\w8\w8\w8\w8\n\n[half]"
-        "[FIND THEM, \w6AND THEN FIND ME AT THE EXIT. \w8\w4PROVE YOUR WORTH.]\w8\w8\x"
+        "\s[0]\i[52][YOU MAY CALL ME NIGHTMARE- \w8\s[0]\i[51]AND I AM NOT GOING TO ALLOW YOU TO LEAVE UNTIL YOU PROVE YOUR WORTH IN THE ROLE YOU HAVE BEEN GIVEN.]\w8\w8\w8\w8\n\n[half]"
+        "\s[0]\i[51]\i[102]\i[202][THIS IS MY MINDSCAPE: \w8THE PALACE OF NIGHT. \w8\w8THE PREVIOUS DREAMCATCHER HAS LEFT SECRETS HERE THAT DREAM WOULD NEVER TELL YOU.]\w8\w8\w8\w8\n\n[half]"
+        "\i[1002][FIND THEM, \w6AND THEN FIND ME AT THE EXIT. \w8\w4PROVE YOUR WORTH.]\w8\w8\x"
     }
+	
+	"\t\*%(fadeout)\s[40]"
 
-    "The feeling of despair leaves you as the figure disappears. \w8You should look for those so called secrets- \w8Secrets that you figure you'll find in the room ahead.\w8\w8\x"
+    "The feeling of despair leaves you as the figure disappears. \w8\w8\n\n[half]Only one way out, then. \w8You suppose you have to find these so-called secrets-- \w8Secrets that you figure you'll find in the rooms ahead.\w8\w8\x"
+	
+	"%(fadein)"
 	
 	OnMazeNavMenu
 }
@@ -76,7 +79,7 @@ DescribeCurrentRoom : all
 		when "4,4"
 		{"The hallway continues. A twinkly piano plays something that isn't quite a melody, drifting in from somewhere impossibly far away."}
 		when "4,6"
-		{"dear god please remember to write this"} //TODO: listen to your damn self
+		{"A cloud-like light billows in, softly, from the archway to the right. The pianosong, despite being more present here, makes the corridor feel still."} 
 		when "3,3"
 		{"The entryway is short, but decorated with intricate boiserie and shelves. Books, trinkets-- It's hard for your eye to land on anything in particular."}
 		when "2,3"
@@ -240,8 +243,9 @@ OnJournal : all
 {
     if !Flag("Met.Journal"); MiscFlags ,= "Met.Journal"
 
-    "\b2\*\t"
-    "It's a lectern you approach, a comparatively humble and shabby journal set on its intricate metalworking. \w8The open page reads:\w8\w8\n\n[half]\_q"
+    "\*\t"
+	"%(fadeout)\s[42]%(fadein)"
+    "\b2It's a lectern you approach, a comparatively humble and shabby journal set on its intricate metalworking. \w8The open page reads:\w8\w8\n\n[half]\_q"
 
     foreach keywords; _word
     {
@@ -252,15 +256,17 @@ OnJournal : all
     "\_q\w8\w8\n[half]""I wonder which one will be my fate,"" \w8the journal reads. \w8""Those are the words given to me by Nighmare. \w8Dream starts acting strange when I ask her what Nightmare meant by them, and she never acts like this. \w8\w8She says she's trying to protect me, \w8but is that the face you make at someone you want to protect?""\w8\w8\n\n[half]"
     """I'm going to leave this place. \w8Down two steps, right until the gate... \w8\w8It's always so confusing here. \w8But \w8it's the only place she can't see me, \w8I suppose.""\w8\w8\x"
 	
+	"%(fadeout)\s[40]%(fadein)"
+	
 	OnMazeNavMenu
 }
 
 //when you enter the puzzle tile. conditional, remember to set appropriate flags.
 OnPuzzle : all
 {
-    _one = ""; _two = "\_q"
+    _one = "\s[0]\i[103]\i[203]\i[1000]%(fadein)"; _two = "\_q"
     if reference0 == "restore" 
-    {_one = "\_q"; _two = ""}
+    {_one = "\_q\s[0]"; _two = ""}
 
     if !Flag("Done.Puzzle")
     {
@@ -269,12 +275,12 @@ OnPuzzle : all
 
         "%(_one)\b2\t\*"
 		
-		"As you go down the hallway, the dark blanket of despair descends on you again. \w8\w8Nightmare is waiting for you here- \w8\w8It's the way out.\w8\w8\w8\n\n\"
+		"As you go down the hallway, the dark blanket of despair descends on you again. \w8\w8\s[0]\i[51]\i[103]\i[203]\i[1001]Nightmare is waiting for you here- \w8\w8It's the way out.\w8\w8\w8\n\n\"
 
-        if IsAkari;  "[AH, ARE YOU LEAVING ALREADY? \w8I QUITE ENJOYED YOUR COMPANY. \w8\w8PLEASE, \w8JUST ONE MORE THING.]"
-        else; "[YOU ARE AIMLESS, \w4%(TOUPPER(user)). \w8I DON'T EVEN WANT TO ADDRESS YOU AS THE DREAMCATCHER. \w8AFTER THEY ABANDONED US FOR YEARS, \w6YOU EXPECT ME TO ACCEPT YOU WITH OPEN ARMS? \w8\w8DON'T MAKE ME LAUGH.]"
+        if IsAkari;  "\s[2]\i[53]\i[93]\i[104]\i[203][AH, ARE YOU LEAVING ALREADY? \w8\s[2]\i[93]\i[104]\i[203]I QUITE ENJOYED YOUR COMPANY. \w8\w8PLEASE, \w8JUST ONE MORE THING.]"
+        else; "\i[91][YOU ARE AIMLESS, \w4%(TOUPPER(user)). \w8I DON'T EVEN WANT TO ADDRESS YOU AS THE DREAMCATCHER. \w8AFTER THEY ABANDONED US FOR YEARS, \w6YOU EXPECT ME TO ACCEPT YOU WITH OPEN ARMS? \w8\w8\s[1]\i[93]\i[105]\i[203]DON'T MAKE ME LAUGH.]"
         
-        "\w8\w8\n\n[half]\f[bold,1]\[TELL ME THE DREAMCATCHER'S BURDEN.]"
+        "\w8\w8\w8\s[0]\i[51]\i[106]\i[203]\n\n[half]\f[bold,1]\[TELL ME THE DREAMCATCHER'S BURDEN.]"
 		"\w8\w8\n\n\f[bold,0]\![open,inputbox,OnPuzzleAnswer,-1]"
         
         if Flag("Met.Journal"); "There was a word that stuck out in that journal, you swear."
@@ -307,35 +313,42 @@ OnPuzzleAnswer : all
 		if !Flag("Done.Puzzle"); MiscFlags ,= "Done.Puzzle"
 		userposition = (4,6)
 		
+		"\t\*\s[0]"
+		
 		if IsAkari
 		{
-			"[YES, YES- \w8OF COURSE YOU KNOW, \w4DEAR. \w8I QUITE ENJOYED YOUR COMPANY. \w8PLEASE, \w4JUST ONE MORE THING.]\w8\w8\n\n[half]"
-			"\[THE EXIT IS TO THE RIGHT. \W8DON'T GET TOO COZY WITH DREAM IN MY ABSENCE.]"
+			"\s[2]\i[93]\i[105]\i[203][YES, YES- \w8OF COURSE YOU KNOW, \w4DEAR. \w8I QUITE ENJOYED YOUR COMPANY.]\w8\w8\n\n[half]"
+			"\s[2]\i[52]\[THE EXIT IS TO THE RIGHT. \w8\s[2]\i[51]DON'T GET TOO COZY WITH DREAM IN MY ABSENCE.]"
 		}
 		else
 		{
-			"[AH. \w8SO NOW YOU SEE.]\w8\w8\n\n[half]"
-			"[YOUR PERFORMANCE IS PASSABLE, \w4DREAMCATCHER %(TOUPPER(user)). \w8\w8IN HUMORING ME, YOU'VE SHOWN ME THE BARE MINIMUM: \w8THE ABILITY TO LISTEN, \w4THE PATIENCE TO WATCH, \w4AND THE SCRUTINY TO KEEP AN EYE ON YOUR ALLIES.]\w8\w8\w8\n\n"
-			"\[BELIEVE ME. \w8IT'S A RARE GRACE.]\w8\w8\w8\n\n"
-			"\[KEEP GOING RIGHT, \w4IF YOU TIRE OF MY PALACE AND WISH TO LEAVE.]"
+			"\s[0]\i[92]\i[105]\i[203][AH. \w8SO NOW YOU SEE.]\w8\w8\w8\n\n[half]"
+			"\s[0][YOUR PERFORMANCE IS PASSABLE, \w4DREAMCATCHER %(TOUPPER(user)). \w8\w8\w8\i[52]\i[102]\i[203]IN HUMORING ME, YOU'VE SHOWN ME THE BARE MINIMUM: \w8THE ABILITY TO LISTEN, \w4THE PATIENCE TO WATCH, \w4\![anim,stop,51]\i[52]AND THE SCRUTINY TO KEEP AN EYE ON YOUR ALLIES.]\w8\w8\w8\w8\n\n"
+			"\s[2]\i[51]\i[93]\i[102]\i[203]\[BELIEVE ME. \w8IT'S A RARE GRACE.]\w8\w8\w8\n\n"
+			"\s[0]\i[52]\[KEEP GOING RIGHT, \w4IF YOU TIRE OF MY PALACE AND WISH TO LEAVE.]"
 		}
 		
 		"\w8\x"
+		"%(fadeout)\s[40]%(fadein)"
 	}
 	else
 	{
 		puzzlelosercount++
 		
+		"\t\*\s[0]"
+		
 		if IsAkari
 		{
 			nonoverlap_pool
 			{
-				"[OH? \w8DID YOU GET THAT WRONG JUST TO SPEND TIME WITH ME? \w8I WOULDN'T MIND IF YOU STAYED HERE FOREVER, AKARI.]"
-				"[OH, \w4YOU'RE IMPOSSIBLE TO FIGHT WHEN YOU GET THAT SMIRK ON YOUR FACE... \W8NOT THAT I MIND.]"
+				"\s[2]\i[93]\i[105]\i[203]"
+				--
+				"[OH? \w8DID YOU GET THAT WRONG JUST TO SPEND TIME WITH ME? \w8\i[51]I WOULDN'T MIND IF YOU STAYED HERE FOREVER, AKARI.]"
+				"[OH, \w4YOU'RE IMPOSSIBLE TO FIGHT WHEN YOU GET THAT SMIRK ON YOUR FACE... \w8\i[51]NOT THAT I MIND.]"
 				"[PLEASE, \w4AKARI. \w8IF YOU WANT TO TALK TO ME, \w4WOULDN'T YOU RATHER GO TO MY STUDY INSTEAD?]"
 				if puzzlelosercount >= 4
 				{
-					"[YOU ARE BEING... \w8VERY PARTICULARLY ENIGMATIC TODAY, AREN'T YOU, DEAR? \w8NO, NO, NOTHING BY IT...]"
+					"[YOU ARE BEING... \w8VERY PARTICULARLY ENIGMATIC TODAY, AREN'T YOU, DEAR? \w8\i[51]NO, NO, NOTHING BY IT...]"
 				}
 			}
 		}
@@ -343,6 +356,8 @@ OnPuzzleAnswer : all
 		{
 			nonoverlap_pool
 			{
+				"\s[1]\i[105]\i[203]"
+				--
 				"[NO. OF COURSE, YOU MISS THE CAPITAL KEY.]"
 				"[NO. YOU'RE HARDLY OBSERVANT, EVEN OVER SOMETHING SO CAPITAL...]"
 				"[NO. YOU CAN'T SEEM TO GRASP THE ELEVATED, UPPER CASE OF YOUR ROLE.]"
@@ -363,6 +378,10 @@ OnPuzzleLeave
     userposition = (4,4)
     "\![close,inputbox,__SYSTEM_ALL_INPUT__]"
 	--
+	"\s[0]\i[51]\i[105]\i[203]"
+	--
     "[VERY WELL.]"
 	"[HMPH. AT YOUR LEAVE.]"
+	--
+	"%(fadeout)\s[40]%(fadein)"
 }

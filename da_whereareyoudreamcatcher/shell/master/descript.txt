@@ -6,5 +6,27 @@ craftman,whataphantasia
 craftmanw,whataphantasia
 craftmanurl,https://whataphantasia.github.io/projects/ukagaka
 
+seriko.zorder,0,1
 seriko.alignmenttodesktop,bottom
 seriko.use_self_alpha,1
+
+sakura.balloon.offsety,450
+
+menu.background.alignment,lefttop + repeatx + repeaty
+menu.foreground.alignment,lefttop + repeatx + repeat
+
+menu.background.font.color.r,210
+menu.background.font.color.g,210
+menu.background.font.color.b,210
+
+menu.foreground.font.color.r,180
+menu.foreground.font.color.g,150
+menu.foreground.font.color.b,250
+
+menu.disable.font.color.r,150
+menu.disable.font.color.g,150
+menu.disable.font.color.b,150
+
+menu.separator.color.r,0
+menu.separator.color.g,0
+menu.separator.color.b,0

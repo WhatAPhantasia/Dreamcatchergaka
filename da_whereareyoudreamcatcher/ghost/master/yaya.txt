@@ -8,6 +8,7 @@ charset.extension, UTF-8
 dicdir, yaya_base
 
 dic, boot.dic
+dic, commu.dic
 dic, completion.dic
 dic, maze.dic
 dic, mouse.dic

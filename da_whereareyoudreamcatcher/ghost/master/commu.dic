@@ -1,0 +1,63 @@
+OnSpectrePlugin.ConfirmCalibration
+{
+	//weird behavior here that will fuck up spectre but we ball (nightmare doesnt have idle dialogue and is very railroady)
+	if gamestate == 2 || gamestate == 4
+	{"\![raiseplugin,Spectre,OnCustomCalibrationConfirm]"}
+	else
+	{"\![raiseplugin,Spectre,OnCustomCalibrationConfirm,__NO_EXPRESSIONS__]"}
+}
+
+OnSpectrePlugin.Surface
+{
+	if gamestate == 4 //study
+	{
+		if reference0 == "normal"; "\s[0]"
+		elseif reference0 == "embarrassed"; "\s[1]\i[93]\i[103]"
+		elseif reference0 == "surprised"; "\s[0]\i[92]"
+		elseif reference0 == "anxious"; "\s[0]\i[51]\i[93]\i[104]\i[203]"
+		elseif reference0 == "discouraged"; "\s[0]\i[52]\i[93]\i[103]\i[203]"
+		elseif reference0 == "smile"; "\s[2]"
+		elseif reference0 == "relieved"; "\s[2]\i[52]"
+		elseif reference0 == "angry"; "\s[0]\i[51]\i[91]"
+		elseif reference0 == "sweat"; "\s[2]\i[52]\i[93]\i[105]\i[203]"
+		elseif reference0 == "indignant"; "\s[1]\i[51]\i[91]\i[105]\i[203]"
+		elseif reference0 == "thinking"; "\s[0]\i[52]\i[103]\i[203]"
+		elseif reference0 == "unamused"; "\s[1]\i[51]"
+	}
+	elseif gamestate == 2 //puzzle
+	{
+		if reference0 == "normal"; "\s[20]"
+		elseif reference0 == "embarrassed"; "\s[21]\i[93]\i[301]"
+		elseif reference0 == "surprised"; "\s[20]\i[92]"
+		elseif reference0 == "anxious"; "\s[20]\i[51]\i[93]\i[300]"
+		elseif reference0 == "discouraged"; "\s[20]\i[52]\i[93]\i[202]"
+		elseif reference0 == "smile"; "\s[22]"
+		elseif reference0 == "relieved"; "\s[22]\i[52]\i[300]"
+		elseif reference0 == "angry"; "\s[20]\i[51]\i[91]"
+		elseif reference0 == "sweat"; "\s[22]\i[52]\i[93]\i[300]"
+		elseif reference0 == "indignant"; "\s[21]\i[51]\i[91]\i[201]"
+		elseif reference0 == "thinking"; "\s[20]\i[52]\i[300]"
+		elseif reference0 == "unamused"; "\s[21]\i[51]\i[202]"
+	}
+}
+
+OnSpectrePlugin.Possession
+{
+	if gamestate == 2 && RAND(4) == 0
+	{
+		"\s[20][...HAVE YOU GOTTEN USED TO THE COLLECTIVE MINDSCAPE, %(TOUPPER(user))? \w8\i[52]THIS IS QUITE COMMON, \w4REALLY.]"
+		"\s[20][THE NIGHTMARES IN THE SHELVES HAVE A HABIT OF SEEPING INTO YOU. \w8\i[201]PAY IT NO MIND.]"
+	}
+}
+
+OnNeedlePoke
+{
+	if gamestate == 2 && reference0 == 0 && !BalloonIsOpen
+	{
+		"\s[20]\i[51][...YOU'VE GOTTEN SKILLED AT LUCID MANISFESTATION, AND THIS IS WHAT YOU USE IT FOR?]"
+		"\s[20]\i[51][...WHAT ARE YOU TRYING, HERE?]"
+		"\s[20]\i[51][AH, NEEDLES... \w8\w8\s[20]\i[52]THEY APPEAR IN SO MANY NIGHTMARES, \w8IN SO MANY DIFFERENT FORMS. \w8\w8\s[22]\i[51]\i[91]I SHOULD SHOW YOU SOMETIME.]"
+		"\s[20]\i[51][HM. \w8I DO WISH YOU'D STOP DOING THAT.]"
+		"\s[20]\i[51][...HM. \w8I SUPPOSE YOU FIND THIS FUN. \w8\w8\s[20]\i[51]\i[92]\i[300]INTERESTING.]"
+	}
+}

@@ -6,10 +6,16 @@ OnMazeEnd : all
 	"\*\t"
 	"You come across a large arch in the marble walls. \w8It's a portal, it seems- \w8And you step across the threshold.\x"
 
-	"%(s.init)"
-	"""%(Capitalize(user))! \w8There you are!""\w8\w8\n\n[half]"
-	"You find yourself back in the Dreamcatcher Archives. \w8The warm bookcases reach to the intricate, cloud-covered ceiling. \w8Dream approaches you with a worried smile.\w8\w8\n\n[half]"
-	"""Where did you go? \w8I hope you aren't hurt- \w8I lost you near the nightmares, \w2so I was worried...""\w8\w8\x"
+	"\*\t%(fadeout)\1%(fadeout)"
+	
+	"\s[2000]%(fadein)\0\s[50]%(fadein)"
+	
+	"\b2"
+	"""%(Capitalize(user))! \w8There you are!""\w8\w8\w8\n\n[half]\i[88]"
+	"You find yourself back in the Dreamcatcher Archives. \w8The warm bookcases reach to the intricate, cloud-covered ceiling. \w8\w8Dream approaches you with a worried smile.\w8\w8\n\n[half]"
+	"\s[52]""Where did you go? \w8I hope you aren't hurt- \w8I lost you near the nightmares, \w2so I was worried...""\w8\w8\x%(fadeout)"
+	
+	"\t\*"
 
 	if IsAkari
 	{
@@ -19,7 +25,7 @@ OnMazeEnd : all
 	}
 	elseif seenallstudy
 	{
-		"You think you have a better understanding of Dream, now- \w8That look on his face is a deep, \w4genuine concern. \w8The only issue was his secrecy, \w4for which you didn't understand.\w8\w8\n\n[half]"
+		"You think you have a better understanding of Dream, now- \w8That look on his face is a deep, \w4genuine concern. \w8The only issue was his secrecy, \w4for which he never explained to you.\w8\w8\n\n[half]"
 		"It looks like you're going to have a long talk with Dream.\w8\w8"
 		"\n\n\_q\f[align,right]\f[bold,1]- THANK YOU FOR READING!"
 	}
@@ -29,6 +35,10 @@ OnMazeEnd : all
 		"You end up with questions brewing in your mind- \w8But at least you're back home.\w8\w8"
 		"\n\n\_q\f[align,right]\f[bold,1]- THANK YOU FOR READING!"
 	}
+	
+	"\x"
+	
+	"\s[40]%(fadein)"
 }
 
 //handles ending menu.
@@ -47,7 +57,7 @@ OnMenuEnd : all
 		"Looks like you have no other ghosts to boot. Try installing more ghosts!\n\n"
 	}
 
-	"\![*]\q[Close Ghost,OnClose]  \![*]\q[Reset,OnReset]"
+	"\![*]\q[Close Menu,]  \![*]\q[Close Ghost,OnClose]  \![*]\q[Reset,OnReset]"
 }
 
 OnMenuEnd.Change
@@ -67,27 +77,19 @@ OnClose
 	{
 		when 1
 		{
-
+			"That's enough of this memory, isn't it? \w8Quietly, \w8you open your eyes."
 		}
 		when 2
 		{
-
+			"The smell of tea and books makes your eyelids heavy. \w8Before you realize it, \w4you've already drifted away from sleep."
 		}
-		when 3
+		others //3 and 4 are literally unaccountable for and 5 is a gamestate that should get fixed. 
 		{
-
+			"Drifting out of sleep feels as natural as breathing. \w8The dark becomes nothing, \w4and your mind begins buzzing..."
 		}
-		when 4
-		{
-
-		}
-		when 5
-		{
-
-		}
-		others
-		{
-			
-		}
+		
+		--
+		
+		"\0%(fadeout)\1%(fadeout)\-"
 	}
 }

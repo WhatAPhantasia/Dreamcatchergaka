@@ -48,26 +48,54 @@ OnWindowStateRestore
 	OnSurfaceRestore
 }
 
-s.init
-{	
-	case SHIORI3FW.EventidOld
+s.init : all
+{
+	_fade = 0
+	if SHIORI3FW.Eventid == "OnBoot"; _fade = 1
+
+	"\![reset,sticky-window]\![set,sticky-window,0,1]" 
+	"\0\s[10]\![move,--X=0,--Y=0,--base=0,--option=ignore-sticky-window]"
+	if gamestate == 1; "\1\s[2000]\![move,--X=0,--Y=0,--base=0,--option=ignore-sticky-window]"
+	else; "\1\s[1000]\![move,--X=0,--Y=0,--base=0,--option=ignore-sticky-window]"
+	
+	if _fade; "%(fadein)"
+	else; "\![set,alpha,100]"
+	
+	case gamestate
 	{
-		when "OnFirstBoot", "OnNameTeach"
-		{"\0\s[0]"}
-		others
-		{
-			case gamestate
-			{
-				when 1; "\0\s[50]" //dream archive
-				when 2; "\0\s[20]" //nightmare study
-				when 3; "\0\s[1000]" //journal
-				when 4; "\0\s[0]" //puzzle
-				others; "\0\s[0]" //normal gameplay
-			}
+		when 1; "\0\s[40]" //dream archive
+		when 2 { 			//nightmare study
+			if !IsAkari; 	"\0\s[20]"
+			else;			"\0\s[22]\i[51]" 
+			//dear god. please don't look at this indenting its so ugly
 		}
+		when 3; "\0\s[42]" //journal 
+							//TODO: i'd love to make a special lectern for this instead of reusing my freeshell LOL
+		when 4; "\0\s[0]" //puzzle
+		others; "\0\s[40]" //normal gameplay
 	}
 	
+	if _fade; "%(fadein)"
+	else; "\![set,alpha,100]"
 }
+
+fadein : all
+{
+	for _i = 0; _i < 100; _i++
+	{
+		"\![set,alpha,%(_i)]\w[10]"
+	}
+	"\![set,alpha,100]"
+}
+fadeout : all
+{
+	for _i = 100; _i > 0; _i--
+	{
+		"\![set,alpha,%(_i)]\w[10]"
+	}
+	"\![set,alpha,0]"
+}
+
 
 //Network update url. Make sure you have a / on the end of the url or it will give a warning every time users try to update! If you don't plan to use network updates you can remove this
 //IF YOU'RE USING GITHUB FOR NETWORK UPDATES: DO NOT USE github.io URLS! It will cause you pain and suffering. USE raw.githubusercontent!!!
@@ -185,24 +213,6 @@ BalloonIsOpen
 
 //Written by Zichqec https://ukagaka.zichqec.com/
 
-//Usage: This is intended to take the place of single-use variables that only contain 0 or 1, used as flags for certain events and such. With these functions, you can store all those flags as a single array, meaning you can make as many flags as you want without having to really worry about save bloat. It can also make your code a bit more readable!
-
-//You'll want to put 'MiscFlags = IARRAY' into your OnFirstBoot. That'll set up an empty array for flags to be stored in.
-//When you want to check if a flag is set or not, you can do it like so:
-//if Flag("My Flag") == 0
-//or
-//if Flag("My Flag") == 1
-
-//Any flags that are NOT in the array are 0, and any flags that ARE in the array are 1. So, to set a flag to 1, you add it to the array like this:
-//if Flag("My Flag") == 0; MiscFlags ,= "My Flag"
-
-//You don't technically need the if check there, but it stops duplicate entries from being added. The ,= is also important; that adds a new element to an array. Don't use += for this!
-
-//If you want to set a flag back to 0, you can remove it like so:
-//RemoveFlag("My Flag")
-
-//Flag names can be just about anything you want! They're just stored as strings. For example, for S I have "Saw Gaster with googly eyes", and for Lulo I have things like "Unlocked MP3 player" and "Unlocked journal". If you want to see what flags are set, you can just put %(MiscFlags) into script input, so it's helpful to have names that describe the flag!
-
 Flag //Checks to see if a flag exists. Returns 1 if yes, returns 0 if no
 {
 	if ASEARCH(_argv[0],MiscFlags) != -1; 1
@@ -240,13 +250,3 @@ RemoveMapFlag //Removes all instances of a flag in the array.
 		}
 	}
 }
-
-//Technical details:
-
-//ASEARCH is a YAYA command that searches an array for the value you specify. If it doesn't find the value, it returns -1. If it finds the value, it returns the position in the array.
-
-//ASEARCHEX is similar, but it finds all instances of the same value, and returns the positions as a new array.
-
-//So, it IS possible to skip a step here and write if ASEARCH("My Flag",MiscFlags) != -1, to see if a flag is set. But != -1 is a bit confusing at times! So the Flag function here returns 1 if the flag is set, and 0 if it is not, to simplify things.
-
-//With the RemoveFlag function, all it does is see how many instances of the value there are, then start erasing them from the end of the array working towards the start of the array, so that the array positions don't change as it erases. The reason I've done it this way is so that if someone accidentally adds the same flag to the array a bunch of times, all of them will be erased, so that the flag returns 0.
