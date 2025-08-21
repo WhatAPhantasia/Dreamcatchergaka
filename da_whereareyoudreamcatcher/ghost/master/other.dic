@@ -15,6 +15,12 @@ OnTranslate
 		if RE_SEARCH(_talk,"^\\1"); _talk = RE_REPLACE(_talk,"^\\1","\1\![set,balloonwait,105%]")
 		elseif RE_SEARCH(_talk,"^\0"); _talk = RE_REPLACE(_talk,"^\0","\0\![set,balloonwait,105%]")
 	}
+	if gamestate == 4 && reference3[0,C_BYTE1] == "restore"
+	{
+		_talk = RE_REPLACE(_talk,"\\w\d","")
+		_talk = RE_REPLACE(_talk,"\\s\[\d+\]","")
+		_talk = RE_REPLACE(_talk,"\\i\[\d+\]","")
+	}
 	
 	TOSTR(_talk)
 }

@@ -16,7 +16,9 @@ OnFirstBoot : all
 		//	when user first sees the old dreamcatcher's journal
 		//
 		//Met.Study
-		//	when user first enters the study
+		//	when user first enters the study, even if nightmare kicks them out
+		//Done.Study.Sit
+		//	when user first sits down with nightmare
 		//Done.Study.[Topic]
 		//	for each topic asked. theres a variable (seenallstudy) that marks true once all topics are asked
 		//

@@ -43,7 +43,7 @@ OnSpectrePlugin.Surface
 
 OnSpectrePlugin.Possession
 {
-	if gamestate == 2 && RAND(4) == 0
+	if gamestate == 2 && RAND(4) == 0 && !BalloonIsOpen
 	{
 		"\s[20][...HAVE YOU GOTTEN USED TO THE COLLECTIVE MINDSCAPE, %(TOUPPER(user))? \w8\i[52]THIS IS QUITE COMMON, \w4REALLY.]"
 		"\s[20][THE NIGHTMARES IN THE SHELVES HAVE A HABIT OF SEEPING INTO YOU. \w8\i[201]PAY IT NO MIND.]"

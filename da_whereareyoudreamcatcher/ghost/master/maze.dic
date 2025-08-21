@@ -266,7 +266,7 @@ OnPuzzle : all
 {
     _one = "\s[0]\i[103]\i[203]\i[1000]%(fadein)"; _two = "\_q"
     if reference0 == "restore" 
-    {_one = "\_q\s[0]"; _two = ""}
+    {_one = "\_q"; _two = ""}
 
     if !Flag("Done.Puzzle")
     {
@@ -275,12 +275,15 @@ OnPuzzle : all
 
         "%(_one)\b2\t\*"
 		
-		"As you go down the hallway, the dark blanket of despair descends on you again. \w8\w8\s[0]\i[51]\i[103]\i[203]\i[1001]Nightmare is waiting for you here- \w8\w8It's the way out.\w8\w8\w8\n\n\"
+		"As you go down the hallway, the dark blanket of despair descends on you again. \w8\w8\s[0]\i[51]\i[103]\i[203]\i[1001]Nightmare is waiting for you here- \w8\w8It's the way out.\w8\w8\w8\n\n"
 
-        if IsAkari;  "\s[2]\i[53]\i[93]\i[104]\i[203][AH, ARE YOU LEAVING ALREADY? \w8\s[2]\i[93]\i[104]\i[203]I QUITE ENJOYED YOUR COMPANY. \w8\w8PLEASE, \w8JUST ONE MORE THING.]"
-        else; "\i[91][YOU ARE AIMLESS, \w4%(TOUPPER(user)). \w8I DON'T EVEN WANT TO ADDRESS YOU AS THE DREAMCATCHER. \w8AFTER THEY ABANDONED US FOR YEARS, \w6YOU EXPECT ME TO ACCEPT YOU WITH OPEN ARMS? \w8\w8\s[1]\i[93]\i[105]\i[203]DON'T MAKE ME LAUGH.]"
-        
-        "\w8\w8\w8\s[0]\i[51]\i[106]\i[203]\n\n[half]\f[bold,1]\[TELL ME THE DREAMCATCHER'S BURDEN.]"
+		if IsAkari;  "\s[2]\i[53]\i[93]\i[104]\i[203]\[AH, ARE YOU LEAVING ALREADY? \w8\s[2]\i[93]\i[104]\i[203]I QUITE ENJOYED YOUR COMPANY. \w8\w8PLEASE, \w8JUST ONE MORE THING.]"
+		else; "\i[91]\[YOU ARE AIMLESS, \w4%(TOUPPER(user)). \w8I DON'T EVEN WANT TO ADDRESS YOU AS THE DREAMCATCHER. \w8AFTER THEY ABANDONED US FOR YEARS, \w6YOU EXPECT ME TO ACCEPT YOU WITH OPEN ARMS? \w8\w8\s[1]\i[93]\i[105]\i[203]DON'T MAKE ME LAUGH.]"
+		
+		"\w8\w8\w8\s[0]\i[51]\i[106]\i[203]\n\n[half]"
+		
+		"\f[bold,1]\[TELL ME THE DREAMCATCHER'S BURDEN.]"
+		
 		"\w8\w8\n\n\f[bold,0]\![open,inputbox,OnPuzzleAnswer,-1]"
         
         if Flag("Met.Journal"); "There was a word that stuck out in that journal, you swear."
@@ -292,8 +295,8 @@ OnPuzzle : all
     {
         "Nightmare isn't here anymore. \w8"
 		
-		if !Flag("Done.Study") && !Flag("Met.Study"); "You get a feeling he might be somewhere in the library, \w4actually... \w8You feel hopelessly confused about what the words in that journal even meant."
-		elseif Flag("Met.Study"); "You feel weirdly incomplete- \w8You didn't get all the answers from Nightmare in his study. \w8About what the words in the journal even meant, \w4and who he thinks you are..."
+		if !seenallstudy && !Flag("Met.Study"); "You get a feeling he might be somewhere in the library, \w4actually... \w8You feel hopelessly confused about what the words in that journal even meant."
+		elseif !seenallstudy; "You feel weirdly incomplete- \w8You didn't get all the answers from Nightmare in his study. \w8About what the words in the journal even meant, \w4and who he thinks you are..."
 		else; "Which is expected, \w4of course. \w8He's finishing his tea."
 		
 		if userposition == (4,6)
@@ -306,7 +309,7 @@ OnPuzzle : all
     }
 }
 
-OnPuzzleAnswer : all
+OnPuzzleAnswer
 {
 	if CleanTerm(reference0) == rightword
 	{
@@ -315,27 +318,36 @@ OnPuzzleAnswer : all
 		
 		"\t\*\s[0]"
 		
+		--
+		
 		if IsAkari
 		{
+			all:{
 			"\s[2]\i[93]\i[105]\i[203][YES, YES- \w8OF COURSE YOU KNOW, \w4DEAR. \w8I QUITE ENJOYED YOUR COMPANY.]\w8\w8\n\n[half]"
 			"\s[2]\i[52]\[THE EXIT IS TO THE RIGHT. \w8\s[2]\i[51]DON'T GET TOO COZY WITH DREAM IN MY ABSENCE.]"
+			}
 		}
 		else
 		{
+			all:{
 			"\s[0]\i[92]\i[105]\i[203][AH. \w8SO NOW YOU SEE.]\w8\w8\w8\n\n[half]"
 			"\s[0][YOUR PERFORMANCE IS PASSABLE, \w4DREAMCATCHER %(TOUPPER(user)). \w8\w8\w8\i[52]\i[102]\i[203]IN HUMORING ME, YOU'VE SHOWN ME THE BARE MINIMUM: \w8THE ABILITY TO LISTEN, \w4THE PATIENCE TO WATCH, \w4\![anim,stop,51]\i[52]AND THE SCRUTINY TO KEEP AN EYE ON YOUR ALLIES.]\w8\w8\w8\w8\n\n"
 			"\s[2]\i[51]\i[93]\i[102]\i[203]\[BELIEVE ME. \w8IT'S A RARE GRACE.]\w8\w8\w8\n\n"
 			"\s[0]\i[52]\[KEEP GOING RIGHT, \w4IF YOU TIRE OF MY PALACE AND WISH TO LEAVE.]"
+			}
 		}
 		
-		"\w8\x"
-		"%(fadeout)\s[40]%(fadein)"
+		--
+		
+		"\w8\x%(fadeout)\s[40]%(fadein)"
 	}
 	else
 	{
 		puzzlelosercount++
 		
 		"\t\*\s[0]"
+		
+		--
 		
 		if IsAkari
 		{
@@ -356,7 +368,7 @@ OnPuzzleAnswer : all
 		{
 			nonoverlap_pool
 			{
-				"\s[1]\i[105]\i[203]"
+				"\s[1]\i[51]\i[93]\i[105]\i[203]"
 				--
 				"[NO. OF COURSE, YOU MISS THE CAPITAL KEY.]"
 				"[NO. YOU'RE HARDLY OBSERVANT, EVEN OVER SOMETHING SO CAPITAL...]"
@@ -368,6 +380,8 @@ OnPuzzleAnswer : all
 				}
 			}
 		}
+		
+		--
 		
 		"\w8\x\![raise,OnPuzzle,restore]"
 	}
@@ -383,5 +397,5 @@ OnPuzzleLeave
     "[VERY WELL.]"
 	"[HMPH. AT YOUR LEAVE.]"
 	--
-	"%(fadeout)\s[40]%(fadein)"
+	"\x%(fadeout)\s[40]%(fadein)"
 }
