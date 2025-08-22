@@ -61,3 +61,34 @@ OnNeedlePoke
 		"\s[20]\i[51][...HM. \w8I SUPPOSE YOU FIND THIS FUN. \w8\w8\s[20]\i[51]\i[92]\i[300]INTERESTING.]"
 	}
 }
+
+OnLoboHowl
+{
+	if gamestate == 2 && !BalloonIsOpen && RAND(4)
+	{
+		case reference0
+		{
+		when "normal"
+			{"\s[22]\i[52]\i[300]THOSE HOWLS ECHO NICELY DOWN THE HALLS, DON'T THEY?"}
+		when "sad"
+			{"\s[20]\i[52]\i[300]HM... \w8\w8\![anim,stop,300]\i[301]TYPICAL OF NIGHTMARES. \w8\w8\s[20]\i[51]\i[300]RARER TO HEAR IT FROM WOLVES, THOUGH."
+			"\s[22]\i[52]\i[300]THE WAILS ADD TO THE ATMOSPHERE OF MY MINDSCAPE, HM?"}
+		when "hopeful"
+			{"\s[20]\i[92]...OH? \w8\w8\s[22]\i[51]\i[201]THAT KIND OF SENTIMENT IS RARE HERE."}
+		when "strange"
+			{"\s[22]\i[53]\i[92]\i[300]AHAHAHA-- \w8\s[22]\i[51]\i[202]A GREAT PART OF DREAMS IS HEARING NON-SEQUITURS LIKE THAT, HM?"}
+		when "vulgar"
+			{"\s[20]\i[92]\i[202]AH. \w8\w8\s[20]\i[52]\i[300]DON'T MIND THOSE. \w8WHEN I SAY WE HAVE EVERYONE'S NIGHTMARES HERE, I MEAN \w8\![anim,stop,52]\i[51]EVERYONE'S."}
+		}
+	}
+}
+
+OnPhantaEepy
+{
+	if gamestate == 2 && !BalloonIsOpen
+	{
+		"\s[20]\i[300][OH. \w8HELLO, PHANTA. \w8\w8\i[52]NE DOES THIS OFTEN.]"
+		"\s[20]\i[300][AH. \w8\w8\i[51]ALRIGHT, YOU CAN SLEEP THERE.]"
+		"\s[20]\i[300][PHANTA IS LIKE A CAT THAT WALKS IN WHENEVER IT WANTS. \w8\w8\i[52]DON'T MIND NIM.]"
+	}
+}
